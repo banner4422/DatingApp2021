@@ -1,0 +1,14 @@
+{  
+    "server": "datingserverlocal.database.windows.net", 
+    "authentication": {
+        "type": "default",
+        "options": {
+            "userName": "Ameer", 
+            "password": "Lerager29" 
+        }
+    },
+    "options": {
+        "encrypt": true,
+        "database": "LocalDatabase"
+    }
+} 
