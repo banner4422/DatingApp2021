@@ -2,7 +2,7 @@
   "name": "datingapp2021",
   "version": "1.0.0",
   "description": "our dating app start, perhaps backend",
-  "main": "index.js",
+  "main": "db_connect.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
