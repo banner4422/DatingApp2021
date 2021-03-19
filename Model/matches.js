@@ -1,0 +1,3 @@
+class Matches {
+    constructor(m)
+}
