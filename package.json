@@ -4,6 +4,7 @@
   "description": "our dating app start, perhaps backend",
   "main": "db_connect.js",
   "scripts": {
+    "start": "func start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
