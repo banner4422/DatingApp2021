@@ -18,6 +18,13 @@
 			"label": "npm prune",
 			"command": "npm prune --production",
 			"problemMatcher": []
+		},
+		{
+			"type": "npm",
+			"script": "start",
+			"problemMatcher": [],
+			"label": "npm: start",
+			"detail": "func start"
 		}
 	]
 }

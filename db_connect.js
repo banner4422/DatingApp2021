@@ -1,8 +1,8 @@
-var Connection = require('tedious').Connection;
-var Request = require('tedious').Request
+const Connection = require('tedious').Connection;
+const Request = require('tedious').Request
 
 const config = require('./config.json')
-var connection = new Connection(config)
+const connection = new Connection(config)
 
 connection.on('connect', function(err){
     if (err){
@@ -23,7 +23,7 @@ function executeSQL(){
         console.log(err)}})
 
     connection.execSql(request)
-    var counter = 1
+    let counter = 1
     response = {}
     request.on('row', function(columns){
         response[counter] = {}
