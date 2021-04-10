@@ -1,0 +1,17 @@
+.match {
+    margin: 1rem 0;
+    padding: 0;
+}
+
+.match-info {
+    padding: 1rem;
+    text-align: center;
+}
+.match-info h2, p {
+    margin: 0 0 0.5rem 0;
+}
+
+.match-delete {
+    padding: 1rem;
+    text-align: center;
+}

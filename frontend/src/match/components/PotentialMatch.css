@@ -1,0 +1,18 @@
+.poten {
+    margin: 1rem 0;
+    padding: 0;
+    list-style: none;
+}
+
+.poten-info {
+    padding: 1rem;
+    text-align: center;
+}
+.poten-info h2, p {
+    margin: 0 0 0.5rem 0;
+}
+
+.poten-button {
+    padding: 1rem;
+    text-align: center;
+}
