@@ -39,19 +39,25 @@ const Auth = () => {
     // useStates for the POST request
     // it takes what the user writes in the inputs and set the state for what's written in the input
     // then e.g. the username can be used in the POST request where its value is what the user wrote
-    const [username, setUsername] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [age, setAge] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [gender, setGender] = useState('Female');
     const [genderInterest, setGenderInterest] = useState('Female');
-    const [location, setLocation] = useState('');
+    const [city, setCity] = useState('');
     const [description, setDescription] = useState('');
+    const [interest, setInterest] = useState('');
+    const [ageMin, setAgeMin] = useState('');
+    const [ageMax, setAgeMax] = useState('');
+
 
     // Fetches data to be used for signing up
     // new Azure Functions implementation
     const [genderFetch, setGenderFetch] = useState('');
     const [genderInterestFetch, setGenderInterestFetch] = useState('');
+    const [interestFetch, setinterestFetch] = useState('');
 
     // fetches the gender table from /api/getGenders, or ../../../../getGenders/index
     useEffect (() => {
@@ -64,6 +70,25 @@ const Auth = () => {
                     throw new Error(results.message);
                 }
                 setGenderFetch(results);
+            } catch (err) {
+                console.log(err)
+            }
+            setLoading(false)
+        };
+        GET();
+    }, []);
+
+    // fetches the gender_Interest table from /api/getInterest, or ../../../../getInterest/index
+    useEffect (() => {
+        const GET = async () => {
+            setLoading(true);
+            try {
+                const response = await fetch('http://' + process.env.REACT_APP_backend + '/api/getInterest');
+                const results = await response.json();
+                if(!response.ok) {
+                    throw new Error(results.message);
+                }
+                setinterestFetch(results);
             } catch (err) {
                 console.log(err)
             }
@@ -137,21 +162,26 @@ const Auth = () => {
         } else {
             // if the user wants to signup
             try {
-                const response = await fetch('http://localhost:' + process.env.REACT_APP_backendPort +'/api/user/signup', {
+                const response = await fetch('http://' + process.env.REACT_APP_backend + '/api/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 mode: 'cors',
-                body: JSON.stringify({username,
+                body: JSON.stringify({
                     // all the useStates from above
-                    age,
-                    email,
-                    password,
-                    gender,
-                    genderInterest,
-                    location,
-                    description
+                    firstName: firstName,
+                    lastName: lastName,
+                    age: age,
+                    gender: gender,
+                    genderInterest: genderInterest,
+                    interest: interest,
+                    ageInterestMin: ageMin,
+                    ageInterestMax: ageMax,
+                    city: city,
+                    description: description,
+                    email: email,
+                    password: password
                 })
             });
             // converts the data to json
@@ -163,7 +193,7 @@ const Auth = () => {
             // we are now done sending data, so setLoading = false
             setLoading(false);
             // log the user in after signing up, by using their userID
-            auth.login(responseData.user.id);
+            auth.login(responseData.id);
             } catch (err) {
                 // catch error if it couldn't even connect to the API route for some reason
                 setLoading(false);
@@ -181,14 +211,20 @@ const Auth = () => {
         {/* If the user wants to sign up */}
         {!Login && (<div>
             <div>
-            <label htmlFor='username'>Username:</label><br></br>
+            <label htmlFor='firstName'>First Name</label><br></br>
             {/* The onChange function updates the state based on user input, same goes for the others below */}
-            <input type='text' id='username' name='username' value={username} onChange={event => setUsername(event.target.value)}></input><br></br>
+            <input type='text' id='firstName' name='firstName' value={firstName} onChange={event => setFirstName(event.target.value)}></input><br></br>
+            </div>
+
+            <div>
+            <label htmlFor='lastName'>Last Name</label><br></br>
+            {/* The onChange function updates the state based on user input, same goes for the others below */}
+            <input type='text' id='lastName' name='lastName' value={lastName} onChange={event => setLastName(event.target.value)}></input><br></br>
             </div>
 
             <div>
             <label htmlFor='age'>Age:</label><br></br>
-            <input type='text' id='age' name='age' value={age} onChange={event => setAge(event.target.value)}></input><br></br>
+            <input type='number' id='age' min= '18' name='age' value={age} onChange={event => setAge(event.target.value)}></input><br></br>
             </div>
 
             <div>
@@ -208,7 +244,7 @@ const Auth = () => {
             </div>
 
             <div>
-            <label htmlFor='genderInterestList'>You are interested in</label><br></br>
+            <label htmlFor='genderInterestList'>You are interested in what gender?</label><br></br>
                 <select form='theData' id='genderInterestList' onChange={event => setGenderInterest(event.target.value)}>
             <option value="" selected disabled hidden>Who?</option>            
                 {
@@ -224,8 +260,33 @@ const Auth = () => {
             </div>
 
             <div>
-            <label htmlFor='location'>Location:</label><br></br>
-            <input type='text' id='location' name='location' value={location} onChange={event => setLocation(event.target.value)}></input><br></br>
+            <label htmlFor='interestList'>You are interested in</label><br></br>
+                <select form='theData' id='interestList' onChange={event => setInterest(event.target.value)}>
+            <option value="" selected disabled hidden>Which interest matches you?</option>            
+                {
+                interestFetch.map(result => 
+                    {
+                    return(
+                    <option value={result.id}>{result.interest}</option>
+                    )
+                }
+                )
+                }
+            </select><br></br>
+            </div>
+
+            <div>
+            <label htmlFor='ageInterest'>Which ages are you interested in?</label><br></br>
+            <label htmlFor='ageMin'>Minimum age</label><br></br>
+            <input type='number' id='ageMin' min= '18' name='ageInterest' value={ageMin} onChange={event => setAgeMin(event.target.value)}></input><br></br>
+            <label htmlFor='ageMax'>Maximum age</label><br></br>
+            <input type='number' id='ageMax' min= '18' name='ageInterest' value={ageMax} onChange={event => setAgeMax(event.target.value)}></input>
+            <br></br>
+            </div>
+
+            <div>
+            <label htmlFor='city'>City</label><br></br>
+            <input type='text' id='city' name='city' value={city} onChange={event => setCity(event.target.value)}></input><br></br>
             </div>
 
             <div>
