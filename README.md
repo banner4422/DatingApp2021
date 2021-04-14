@@ -2,7 +2,7 @@
 Lavet af Alexander, Ameer, Christian og Jonas 🍻
 
 ## Hvordan man opsætter development environment for Azure Functions
-1. Download de to filer som findes [her](https://discord.com/channels/807236335445213224/829644283543289936/830529678967046154) (du skal have discord åben før du klikker på ''her)
+1. Download de to filer som findes [her](https://discord.com/channels/807236335445213224/829644283543289936/830529678967046154) (du skal have discord åben før du klikker på ''her) eller gå ind i #programmering på Discord serveren og download de to sidste filer jeg har uploaded
 2. Indsæt de to filer ind i dating app mappen, for at være forbundet med databasen
 3. `npm install` i terminalen for at downloade NPM packages
 4. Start Azure Functions ved at skrive `func start` eller `npm start` i terminalen
