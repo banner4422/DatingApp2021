@@ -161,6 +161,10 @@ const Auth = () => {
             }
         } else {
             // if the user wants to signup
+            if (ageMin > ageMax) {
+                window.alert(`Your minimum age can't be higher than your maximum age`)
+                return
+            }
             try {
                 const response = await fetch('http://' + process.env.REACT_APP_backend + '/api/signup', {
                 method: 'POST',
@@ -186,6 +190,7 @@ const Auth = () => {
             });
             // converts the data to json
             const responseData = await response.json();
+            //console.log(responseData)
             if (!response.ok) {
                 // if the posted data did not pass server-side validation
             throw new Error(responseData.message);
@@ -193,7 +198,7 @@ const Auth = () => {
             // we are now done sending data, so setLoading = false
             setLoading(false);
             // log the user in after signing up, by using their userID
-            auth.login(responseData.id);
+            auth.login(responseData[0].value);
             } catch (err) {
                 // catch error if it couldn't even connect to the API route for some reason
                 setLoading(false);
