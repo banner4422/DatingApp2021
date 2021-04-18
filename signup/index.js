@@ -1,4 +1,5 @@
 const db = require('./db')
+const TinderUser = require("../model/Classes.js"); 
 
 module.exports = async function (context, req) {
     context.log('the signup function was contacted');
@@ -20,7 +21,17 @@ module.exports = async function (context, req) {
     }
     async function post(context, req){
         try{
-            let payload = req.body;
+            console.log("req.body test nedeunder")
+            console.log(req.body)
+            console.log(req.body.email)
+            console.log(req.body.firstName)
+
+            let payload = new TinderUser(req.body.email, req.body.password, req.body.firstName, req.body.lastName, req.body.city, req.body.age, req.body.interest, req.body.gender, req.body.description, req.body.genderInterest, req.body.ageInterestMin, req.body.ageInterestMax);
+           
+            console.log("nederunder står payload klassen")
+            console.log(payload)
+            console.log("navnet på payload er " + payload.name + " eller med underscore; " + payload._name)
+           
             // fetch the userID created in the signup function from ./db
             let signupID = await db.Signup(payload)
             context.res = {

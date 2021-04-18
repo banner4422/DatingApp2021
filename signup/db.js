@@ -29,7 +29,7 @@ module.exports.startDb = startDb;
 function Signup(payload){
     return new Promise((resolve, reject) => {
         // signs the user up and returns the user's id for use to log in automatically
-        const sql = `INSERT INTO dating.eksempel.[user] (email, password, is_admin) VALUES (@email, @password, 0)
+        const sql = `INSERT INTO dating.eksempel.[user] (email, password, is_admin) VALUES (@email, @password, @isAdmin)
         SET IDENTITY_INSERT dating.eksempel.tinder_user ON
         INSERT INTO dating.eksempel.tinder_user (id, first_name, last_name, city, age, interest, gender, description, gender_interest, age_interest_min, age_interest_max) VALUES (scope_identity(), @first_name, @last_name, @city, @age, @interest, @gender, @description, @gender_interest, @age_interest_min, @age_interest_max)
         SET IDENTITY_INSERT dating.eksempel.tinder_user OFF
@@ -44,18 +44,20 @@ function Signup(payload){
                 console.log(err)
             }
         });
-        request.addParameter('email', TYPES.VarChar, payload.email)
-        request.addParameter('password', TYPES.VarChar, payload.password)
-        request.addParameter('first_name', TYPES.Text, payload.firstName)
-        request.addParameter('last_name', TYPES.Text, payload.lastName)
-        request.addParameter('city', TYPES.Text, payload.city)
-        request.addParameter('age', TYPES.Int, payload.age)
-        request.addParameter('interest', TYPES.Int, payload.interest)
-        request.addParameter('gender', TYPES.Int, payload.gender)
-        request.addParameter('description', TYPES.Text, payload.description)
-        request.addParameter('gender_interest', TYPES.Int, payload.genderInterest)
-        request.addParameter('age_interest_min', TYPES.Int, payload.ageInterestMin)
-        request.addParameter('age_interest_max', TYPES.Int, payload.ageInterestMax)
+
+        request.addParameter('email', TYPES.VarChar, payload._email)
+        request.addParameter('password', TYPES.VarChar, payload._password)
+        request.addParameter('first_name', TYPES.Text, payload._firstName)
+        request.addParameter('last_name', TYPES.Text, payload._lastName)
+        request.addParameter('city', TYPES.Text, payload._city)
+        request.addParameter('age', TYPES.Int, payload._age)
+        request.addParameter('interest', TYPES.Int, payload._interest)
+        request.addParameter('gender', TYPES.Int, payload._gender)
+        request.addParameter('description', TYPES.Text, payload._description)
+        request.addParameter('gender_interest', TYPES.Int, payload._genderInterest)
+        request.addParameter('age_interest_min', TYPES.Int, payload._ageMin)
+        request.addParameter('age_interest_max', TYPES.Int, payload._ageMax)
+        request.addParameter('isAdmin', TYPES.Int, payload._isAdmin)
 
         // signup
         request.on('requestCompleted', (row) => {
