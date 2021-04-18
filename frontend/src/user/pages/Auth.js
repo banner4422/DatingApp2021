@@ -131,8 +131,16 @@ const Auth = () => {
         // we are now sending data, so setLoading = true
         setLoading(true);
         if (Login) {
+            if (email.length < 1) {
+                window.alert(`You need to write your email`)
+                return
+            }
+            if (password.length < 1) {
+                window.alert(`You need to write your password`)
+                return
+            }
             try {
-                const response = await fetch('http://localhost:' + process.env.REACT_APP_backendPort +'/api/user/login', {
+                const response = await fetch('http://' + process.env.REACT_APP_backend + '/api/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -140,8 +148,8 @@ const Auth = () => {
                 mode: 'cors',
                 body: JSON.stringify({
                     //the email and password useStates from above
-                    email,
-                    password,
+                    email: email,
+                    password: password
                 })
             });
             // converts the data to json
@@ -153,7 +161,7 @@ const Auth = () => {
             // we are now done sending data, so setLoading = false
             setLoading(false);
             // log the user in with the userID from the responseData
-            auth.login(responseData.user.id)
+            auth.login(responseData[0].value)
             } catch (err) {
                 // catch error if it couldn't even connect to the API route for some reason
                 setLoading(false);
@@ -165,6 +173,7 @@ const Auth = () => {
                 window.alert(`Your minimum age can't be higher than your maximum age`)
                 return
             }
+            // we need to add more validation e.g. for missing values etc.
             try {
                 const response = await fetch('http://' + process.env.REACT_APP_backend + '/api/signup', {
                 method: 'POST',
