@@ -1,5 +1,5 @@
 const db = require('./db.js');
-const TinderUser = require("../model/Classes.js"); 
+const TinderUser = require("../../model/Classes"); 
 
 module.exports = async function (context, req) {
     context.log('JavaScript HTTP trigger function processed a request.');
