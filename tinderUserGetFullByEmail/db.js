@@ -21,28 +21,29 @@ function startDb(){
 module.exports.sqlConnection = connection;
 module.exports.startDb = startDb
 
-
-//////////////////////////////////////
-// GET COUNT FROM userCount
-function select1(){
+function select(email){
     return new Promise((resolve, reject) => {
-    const sql = 'SELECT COUNT(*) FROM dating.eksempel.[user]';
+    const sql = `
+    SELECT *
+    FROM dating.eksempel.tinder_user
+    INNER JOIN dating.eksempel.[user]
+    ON dating.eksempel.tinder_user.id = dating.eksempel.[user].id
+    WHERE email = @email
+    `;
     const request = new Request(sql, (err, rowcount) => {
         if (err) {
             reject(err)
             console.log(err)
         } else if (rowcount == 0) {
-            reject({message: 'kan ikke tilgå database fra db.js: '})
+            reject({message: 'User does not exist:'})
         }
     });
+    request.addParameter('email', TYPES.VarChar, email._email)
 
     request.on('row', (columns) => {
         resolve(columns)
-
     });
     connection.execSql(request)   
     })
 }
-module.exports.select1 = select1;
-
-
+module.exports.select = select;

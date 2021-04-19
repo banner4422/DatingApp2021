@@ -1,5 +1,5 @@
 const db = require('./db.js');
-const TinderUser = require("../model/Classes.js"); 
+const TinderUser = require("../model/classes.js"); 
 
 module.exports = async function (context, req) {
     context.log('JavaScript HTTP trigger function processed a request.');
@@ -12,7 +12,10 @@ module.exports = async function (context, req) {
     // her håndteres der om vi enten getter eller poster på samme endpoint pga sikkerhedsmæssige årsager.
     switch (req.method) {
         case 'GET':
-            await get1(context, req);
+            await get(context, req);
+            break;
+        case 'POST':
+            await post(context, req);
             break;
         default: 
             context.res = {
@@ -22,19 +25,21 @@ module.exports = async function (context, req) {
     }
 }
  
-    //////////////////////////////////////////////////////
-    // GET COUNT 11111111
-    async function get1(context) {
+
+    async function get(context, req) {
         try {
-            let userCount = await db.select1()
-            console.log(userCount)
+            let email = new TinderUser(req.body.email, req.body.password, req.body.firstName, req.body.lastName, req.body.city, req.body.age, req.body.interest, req.body.gender, req.body.description, req.body.genderInterest, req.body.ageInterestMin, req.body.ageInterestMax);
+            console.log(email)
+            let user = await db.select(email)
+            console.log(user)
             context.res = {
-                body: userCount
+                body: user
             }
         } catch(error) {
              context.res = {
                  status: 400,
-                 body: `No user count - ${error.message}` 
+                 body: `No user - ${error.message}` 
              }
         }
     }
+     

@@ -7,9 +7,7 @@
       "name": "req",
       "methods": [
         "get",
-        "post",
-        "patch",
-        "delete"
+        "post"
       ]
     },
     {
