@@ -28,26 +28,54 @@ const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   // manage the state of their userID
   const [userID, setUserID] = useState(false);
+  // manage the state of their userID
+  const [is_admin, setIs_admin] = useState(false);
 
   // useCallback() to avoid infinite loops
   // function for when the user successfully logs in
   const login = useCallback(uid => {
     setIsLoggedIn(true);
     setUserID(uid);
+    setIs_admin(false)
+  }, []);
+
+  const adminLogin = useCallback(uid => {
+    setIsLoggedIn(true);
+    setUserID(uid);
+    setIs_admin(true)
   }, []);
 
   // function for when the user successfully logs out
   const logout = useCallback(() => {
     setIsLoggedIn(false);
     setUserID(null);
+    setIs_admin(null)
   }, []);
 
   // routes variable, to be used below for 
   // if the user is logged in or not and for Switch routing (further explanation below)
   let routes;
-
+  // if the logged in user is an admin
+  if (isLoggedIn && is_admin == true) {
+    routes = (
+      <React.Fragment>
+        {/*Statistics page*/}
+        <Route path='/admin/stats' exact>
+          <Matches />
+        </Route>
+        {/*User page*/}
+        <Route path='/admin/users' exact>
+          <Matches />
+        </Route>
+        {/*Matches page*/}
+        <Route path='/admin/matches' exact>
+          <Matches />
+        </Route>
+        <Redirect to='/admin' />
+      </React.Fragment>
+    );
   // if the user is logged in
-  if (isLoggedIn) {
+  } else if (isLoggedIn) {
     // if the user is logged in, then the routes are the following
     // react automatically adjusts to elements written with :, so it knows it's the userID for the path
     routes = (
@@ -114,7 +142,9 @@ const App = () => {
   value={{ isLoggedIn: isLoggedIn, 
     userID: userID,
     login: login, 
-    logout: logout }}
+    logout: logout,
+    adminLogin: adminLogin,
+    is_admin: is_admin  }}
   >
     {/* The rendering of the multi-page web application */}
     {/*

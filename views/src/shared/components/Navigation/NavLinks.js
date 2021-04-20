@@ -21,26 +21,46 @@ const NavLinks = props => {
     const auth = useContext(AuthContext);
 
     return <ul className='nav-links'>
-        {auth.isLoggedIn && (
+        {/* ! means if the value is not true */}
+        {/* Values below are if the user is logged in and is NOT an admin */}
+        {auth.isLoggedIn && !auth.is_admin && (
         <li>
             <NavLink to='/' exact>Matching</NavLink>
         </li>
         )}
-        {auth.isLoggedIn && (
+        {auth.isLoggedIn && !auth.is_admin && (
         <li>
             <NavLink to={`/user/${auth.userID}`} exact>My Profile</NavLink>
         </li>
         )}
-        {auth.isLoggedIn && (
+        {auth.isLoggedIn && !auth.is_admin && (
         <li>
             <NavLink to={`/matches/${auth.userID}`} exact>Matches</NavLink>
         </li>
         )}
-        {!auth.isLoggedIn && (
+        {/* If the user is logged in and IS an admin */}
+        {auth.isLoggedIn && auth.is_admin && (
+        <li>
+            <NavLink to='/admin/stats' exact>Statistics</NavLink>
+        </li>
+        )}
+        {auth.isLoggedIn && auth.is_admin && (
+        <li>
+            <NavLink to='/admin/users' exact>Users</NavLink>
+        </li>
+        )}
+        {auth.isLoggedIn && auth.is_admin && (
+        <li>
+            <NavLink to='/admin/matches' exact>Matches</NavLink>
+        </li>
+        )}
+        {/* If the user is not logged in */}
+        {!auth.isLoggedIn && !auth.is_admin && (
         <li>
             <NavLink to='/auth' exact>Log in</NavLink>
         </li>
         )}
+        {/* universal logout */}
         {auth.isLoggedIn && 
         <li>
             <button onClick={auth.logout}>
