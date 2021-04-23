@@ -28,9 +28,9 @@ module.exports = async function (context, req) {
 
     async function get(context, req) {
         try {
-            let email = new TinderUser(req.body.email, req.body.password, req.body.firstName, req.body.lastName, req.body.city, req.body.age, req.body.interest, req.body.gender, req.body.description, req.body.genderInterest, req.body.ageInterestMin, req.body.ageInterestMax);
-            console.log(email)
-            let user = await db.select(email)
+            //let email = new TinderUser(req.body.email, req.body.password, req.body.firstName, req.body.lastName, req.body.city, req.body.age, req.body.interest, req.body.gender, req.body.description, req.body.genderInterest, req.body.ageInterestMin, req.body.ageInterestMax);
+            let userID = req.query.id
+            let user = await db.select(userID)
             console.log(user)
             context.res = {
                 body: user

@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 
-const adminUsers = () => {
+const AdminUsers = () => {
     return
 };
 
-export default adminUsers;
+export default AdminUsers;

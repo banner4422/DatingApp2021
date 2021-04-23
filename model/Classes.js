@@ -18,8 +18,9 @@ class User{
 // TinderUser Class (datter af user)
 module.exports = class TinderUser extends User{
     constructor(email, password, firstName, lastName, city, age, interest, gender, description, genderInterest, ageMin, ageMax ) {
-        super( email, password);
+        super(email, password);
         this._isAdmin = 0;
+        this._id = null;
         this._firstName = firstName;
         this._lastName = lastName;
         this._city = city;
