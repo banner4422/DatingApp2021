@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import './AdminStats.css'
+import './adminStats.css'
 
 const AdminStats = () => {
     const [loading, setLoading] = useState(false);
