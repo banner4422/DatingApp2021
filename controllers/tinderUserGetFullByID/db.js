@@ -21,14 +21,14 @@ function startDb(){
 module.exports.sqlConnection = connection;
 module.exports.startDb = startDb
 
-function select(email){
+function select(userID){
     return new Promise((resolve, reject) => {
     const sql = `
     SELECT *
-    FROM dating.eksempel.tinder_user
-    INNER JOIN dating.eksempel.[user]
-    ON dating.eksempel.tinder_user.id = dating.eksempel.[user].id
-    WHERE email = @email
+    FROM dating.eksempel.tinder_user AS tinder
+    INNER JOIN dating.eksempel.[user] AS theUser
+    ON tinder.id = theUser.id
+    WHERE tinder.id = @id
     `;
     const request = new Request(sql, (err, rowcount) => {
         if (err) {
@@ -38,7 +38,7 @@ function select(email){
             reject({message: 'User does not exist:'})
         }
     });
-    request.addParameter('email', TYPES.VarChar, email._email)
+    request.addParameter('id', TYPES.VarChar, userID)
 
     request.on('row', (columns) => {
         resolve(columns)
