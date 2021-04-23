@@ -84,22 +84,3 @@ class Admin extends User{
 
 
 ///////////////////////////////////////////////////
-
-// Match class
-class Match{
-    constructor(id1, id2){
-     // id1 & id2 er 2 forskellige users
-    this._id1 = id1;   
-    this._id2 = id2;
-    }
-    
-    showFullProfile = function(){
-        // funktion indmad
-    }
-
-    chat = function(){
-        // funktion indmad
-    }
-}
-
-///////////////////////////////////////////////////
