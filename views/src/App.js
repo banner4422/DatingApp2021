@@ -8,6 +8,7 @@ import Matching from './match/pages/Matching';
 import Navigation from './shared/components/Navigation/Navigation'
 import Matches from './match/pages/Matches';
 import Auth from './user/pages/Auth';
+import adminStats from './admin/pages/adminStats'
 
 // imports the authorisation context
 import { AuthContext } from './shared/context/Auth-context'
@@ -62,7 +63,7 @@ const App = () => {
       <React.Fragment>
         {/*Statistics page*/}
         <Route path='/admin/stats' exact>
-          <Matches />
+          <adminStats />
         </Route>
         {/*User page*/}
         <Route path='/admin/users' exact>

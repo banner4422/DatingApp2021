@@ -159,7 +159,7 @@ const Auth = () => {
                 // throw error if the login wasn't successful, perhaps because the data didn't pass server-side validation
             throw new Error(responseData.message);
             }
-            if (responseData[1].value == true) {
+            if (responseData[1].value === true) {
                 setLoading(false);
                 auth.adminLogin(responseData[0].value)
             } else {
