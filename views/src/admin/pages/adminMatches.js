@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 
-const adminMatches = () => {
+const AdminMatches = () => {
     return
 };
 
-export default adminMatches;
+export default AdminMatches;

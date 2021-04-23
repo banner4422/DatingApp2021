@@ -1,7 +1,7 @@
-import React, { useState, useContext, useEffect } from 'react';
-import './adminStats.css'
+import React from 'react';
+import './AdminStats.css'
 
-const adminStats = () => {
+const AdminStats = () => {
     //const [loading, setLoading] = useState(false);
 
     return <div className='adminStats'>
@@ -9,4 +9,4 @@ const adminStats = () => {
     </div>
 };
 
-export default adminStats;
+export default AdminStats;

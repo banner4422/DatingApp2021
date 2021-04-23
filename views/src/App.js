@@ -8,7 +8,7 @@ import Matching from './match/pages/Matching';
 import Navigation from './shared/components/Navigation/Navigation'
 import Matches from './match/pages/Matches';
 import Auth from './user/pages/Auth';
-import adminStats from './admin/pages/adminStats'
+import AdminStats from './admin/pages/AdminStats';
 
 // imports the authorisation context
 import { AuthContext } from './shared/context/Auth-context'
@@ -58,12 +58,12 @@ const App = () => {
   // if the user is logged in or not and for Switch routing (further explanation below)
   let routes;
   // if the logged in user is an admin
-  if (isLoggedIn && is_admin == true) {
+  if (isLoggedIn && is_admin === true) {
     routes = (
       <React.Fragment>
         {/*Statistics page*/}
         <Route path='/admin/stats' exact>
-          <adminStats />
+          <AdminStats />
         </Route>
         {/*User page*/}
         <Route path='/admin/users' exact>
