@@ -5,7 +5,8 @@
 
 // Class User (parent class)
 class User{
-    constructor(email, password) {
+    constructor(id, email, password) {
+        this._id = id;
         this._email = email;
         this._password = password;
         this._isAdmin = 0;
@@ -17,10 +18,9 @@ class User{
 
 // TinderUser Class (datter af user)
 module.exports = class TinderUser extends User{
-    constructor(email, password, firstName, lastName, city, age, interest, gender, description, genderInterest, ageMin, ageMax ) {
-        super(email, password);
+    constructor(id, email, password, firstName, lastName, city, age, interest, gender, description, genderInterest, ageMin, ageMax ) {
+        super(id, email, password);
         this._isAdmin = 0;
-        this._id = null;
         this._firstName = firstName;
         this._lastName = lastName;
         this._city = city;
@@ -32,18 +32,6 @@ module.exports = class TinderUser extends User{
         this._ageMin = ageMin;
         this._ageMax = ageMax;
         
-    }
-
-    postTinderUser = function() {
-        // funktion indmad
-    }
-
-    updateTinderUser = function() {
-        // funktion indmad
-    }
-
-    deleteTinderUser = function() {
-        // funktion indmad
     }
 
 }
