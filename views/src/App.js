@@ -28,7 +28,7 @@ const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   // manage the state of their userID
   const [userID, setUserID] = useState(false);
-  // manage the state of their userID
+  // manage the state of their admin status
   const [is_admin, setIs_admin] = useState(false);
 
   // useCallback() to avoid infinite loops
@@ -39,6 +39,7 @@ const App = () => {
     setIs_admin(false)
   }, []);
 
+  // function for admin user logging in successfully
   const adminLogin = useCallback(uid => {
     setIsLoggedIn(true);
     setUserID(uid);
