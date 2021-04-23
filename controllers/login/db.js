@@ -31,7 +31,7 @@ function Login(payload){
         // signs the user up and returns the user's id for use to log in automatically
         const sql = `
         SET IDENTITY_INSERT dating.eksempel.[user] ON
-        SELECT theUser.id
+        SELECT theUser.id, theUser.is_admin
         FROM eksempel.[user] AS theUser
         WHERE theUser.email = @email AND theUser.password = @password
         SET IDENTITY_INSERT dating.eksempel.[user] OFF`

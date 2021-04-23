@@ -154,14 +154,20 @@ const Auth = () => {
             });
             // converts the data to json
             const responseData = await response.json();
+            console.log(responseData)
             if (!response.ok) {
                 // throw error if the login wasn't successful, perhaps because the data didn't pass server-side validation
             throw new Error(responseData.message);
             }
+            if (responseData[1].value == true) {
+                setLoading(false);
+                auth.adminLogin(responseData[0].value)
+            } else {
             // we are now done sending data, so setLoading = false
             setLoading(false);
             // log the user in with the userID from the responseData
             auth.login(responseData[0].value)
+        }
             } catch (err) {
                 // catch error if it couldn't even connect to the API route for some reason
                 setLoading(false);
