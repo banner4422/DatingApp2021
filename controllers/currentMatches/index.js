@@ -11,7 +11,7 @@ const executeSQL = (context,userId) => {
     const connection = new Connection(config);
 
     // create command to be executed
-    const request = new Request(`SELECT first_name, last_name,city, age, description from dating.eksempel.tinder_user
+    const request = new Request(`SELECT id, first_name, last_name,city, age, description from dating.eksempel.tinder_user
     INNER JOIN dating.eksempel.match ON (dating.eksempel.match.user_id_2 = dating.eksempel.tinder_user.id)
     WHERE dating.eksempel.match.user_id_1 = ${userId} OR dating.eksempel.match.user_id_2 = ${userId}
     FOR JSON PATH`, function(err){
