@@ -66,7 +66,7 @@ const Users = () => {
       <h2>Interest: {interest}</h2>
       <h2>Gender: {gender}</h2>
       <h2>Description: {description}</h2>
-      <h2>Interested in: {interest}</h2>
+      <h2>Interested in: {genderInterest}</h2>
       <h2>Lowest age: {ageMin}</h2>
       <h2>Highest age: {ageMax}</h2>
       <h2>Email: {email}</h2>
