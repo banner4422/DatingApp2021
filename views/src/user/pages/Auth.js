@@ -226,7 +226,7 @@ const Auth = () => {
     return <div className='auth'>
         {/* Remember to set loading because it checks instantly */}
     {loading}
-    <h2>Login</h2>
+    <h2>{Login ? 'Login' : 'Sign up'}</h2>
     <form id='theData' onSubmit={submission}>
         {/* If the user wants to sign up */}
         {!Login && (<div>
