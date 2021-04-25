@@ -1,0 +1,52 @@
+import React, { useState, useContext } from 'react';
+import { useParams, useHistory, Link } from 'react-router-dom';
+import { AuthContext } from '../../shared/context/Auth-context';
+import './Users.css'
+
+const UserDelete = () => {
+    const [loading, setLoading] = useState(false);
+    const userID = useParams().userID;
+    const history = useHistory();
+
+    const auth = useContext(AuthContext)
+
+        const DELETE = async () => {
+            setLoading(true);
+            try {
+                const response = await fetch('http://' + process.env.REACT_APP_backend + `/api/tinderUserDelete?yourID=${userID}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    mode: 'cors'
+                });
+                const results = await response.json();
+                if(!response.ok) {
+                    throw new Error(results.message);
+                }
+            } catch (err) {
+                console.log(err)
+            }
+            setLoading(false);
+            auth.logout();
+            history.push(`/auth`)
+            // when token is implement we'll use window.location.reload() instead
+        };
+
+    return <div div className='Users'>
+        {loading}
+        <h1>Deleting your account</h1>
+        <h3>Are you sure that you want to delete your account?</h3>
+        <div>
+            {/* A button that links back to the user info*/}
+            <Link to={`/user/${userID}`}>
+              <button>No, take me back</button>
+            </Link>
+        </div>
+        <div className='match-delete'>
+            <button onClick={DELETE}>Yes I want to delete my account</button>
+        </div>
+        
+        </div>
+}
+export default UserDelete;

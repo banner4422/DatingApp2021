@@ -103,14 +103,14 @@ const UsersEdit = () => {
         // we are now fetching data, so setLoading = true
         setLoading(true);
         try {
-            const response = await fetch('http://localhost:' + process.env.REACT_APP_backendPort +`/api/user/${userID}`);
+            const response = await fetch('http://' + process.env.REACT_APP_backend +`/api/TinderUserGetFullByID?id=${userID}`);
             const results = await response.json();
             if(!response.ok) {
               // if connection was made with the server, but it couldn't fetch the user data cuz of perhaps an invalid userID ????
                 throw new Error(results.message);
             }
             // sets the userLoad state to the fetched data of the logged in user
-            setUserLoad(results.user);
+            setUserLoad(results);
         } catch (err) {
             // catch error if it couldn't connect to the server for some reason
             console.log(err)

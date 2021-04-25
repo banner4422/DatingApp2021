@@ -37,8 +37,10 @@ const Match = props => {
         {loading}
         <h2>{props.name}, {props.age}</h2>
         <h3>{props.gender}</h3>
-        <h3>Interested in {props.gender_interest}</h3>
+        <h3>Interested in {props.gender_Interest}</h3>
         <h3>{props.city}</h3>
+        <h3>Their hobbies are {props.interest}</h3>
+        <h4>Description:</h4>
         <p>{props.description}</p>
         </div>
         <div className='match-delete'>
