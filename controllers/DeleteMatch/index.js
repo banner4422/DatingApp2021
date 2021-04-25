@@ -25,7 +25,7 @@ module.exports = async function (context, req) {
     // DELETE
     async function deleteMatch(context, req) {
         try{
-            let payload = new Match ( req.body.yourID, req.body.theirID);
+            let payload = new Match ( req.query.yourID, req.query.theirID);
             console.log(payload)
             await db.removeMatch(payload)
             context.res = {

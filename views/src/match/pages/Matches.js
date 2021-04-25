@@ -46,7 +46,7 @@ const Matches = () => {
             setLoading(true);
             try {
                 // needs to be updated with new HTTP
-                const response = await fetch('http://localhost:' + process.env.REACT_APP_backendPort +`/api/match/user/${userID}`);
+                const response = await fetch('http://' + process.env.REACT_APP_backend + `/api/currentMatches?userId=${userID}`);
                 // convert the fetched data to json
                 const results = await response.json();
                 if(!response.ok) {
@@ -54,7 +54,7 @@ const Matches = () => {
                     throw new Error(results.message);
                 }
                 // we set the state of matches to the fetched data
-                setUserLoad(results.matches);
+                setUserLoad(results);
             } catch (err) {
                 // if the fetch wasn't possible at all
                 console.log(err)
@@ -68,6 +68,12 @@ const Matches = () => {
     }, [userID]);
 
     // if a user doesn't have matches (userLoad is empty of objects)
+    if (loading) {
+        return (<div className='center'>
+          <h2>LOADING</h2>
+        </div>)
+      }
+
     if (!userLoad) {
         return (<div className='center'>
           <h2>You don't have any matches yet.</h2>
