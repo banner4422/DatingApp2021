@@ -26,8 +26,9 @@ module.exports = async function (context, req) {
             console.log(req.body.email)
             console.log(req.body.firstName)
 
-            let payload = new TinderUser(req.body.email, req.body.password, req.body.firstName, req.body.lastName, req.body.city, req.body.age, req.body.interest, req.body.gender, req.body.description, req.body.genderInterest, req.body.ageInterestMin, req.body.ageInterestMax);
-           
+           // let payload = new TinderUser(req.body.email, req.body.password, req.body.firstName, req.body.lastName, req.body.city, req.body.age, req.body.interest, req.body.gender, req.body.description, req.body.genderInterest, req.body.ageInterestMin, req.body.ageInterestMax);
+           let payload = new TinderUser(0, req.body.email, req.body.password, req.body.firstName, req.body.lastName, req.body.city, req.body.age, req.body.interest, req.body.gender, req.body.description, req.body.genderInterest, req.body.ageInterestMin, req.body.ageInterestMax);
+
             console.log("nederunder står payload klassen")
             console.log(payload)
             console.log("navnet på payload er " + payload.name + " eller med underscore; " + payload._name)

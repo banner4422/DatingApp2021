@@ -29,8 +29,8 @@ function removeUser(payload){
         FROM dating.eksempel.tinder_user t
         JOIN dating.eksempel.[user] u
         ON t.id = u.id
-        WHERE t.id = @yourID
-        DELETE FROM dating.eksempel.[user] WHERE id = @yourID
+        WHERE email = @email
+        DELETE FROM dating.eksempel.[user] WHERE email = @email
         `;
         const request = new Request(sql, (err) => {
             if (err){
@@ -39,7 +39,7 @@ function removeUser(payload){
             }
         });
         
-        request.addParameter('yourID', TYPES.VarChar, payload._id)
+        request.addParameter('email', TYPES.VarChar, payload._email)
     
         request.on('requestCompleted', (row) => {
             console.log('User deleted', row)

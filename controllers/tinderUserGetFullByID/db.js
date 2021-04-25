@@ -38,7 +38,7 @@ function select(userID){
             reject({message: 'User does not exist:'})
         }
     });
-    request.addParameter('id', TYPES.VarChar, userID)
+    request.addParameter('id', TYPES.VarChar, userID._id)
 
     request.on('row', (columns) => {
         resolve(columns)
