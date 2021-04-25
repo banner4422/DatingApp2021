@@ -244,7 +244,7 @@ const Auth = () => {
 
             <div>
             <label htmlFor='age'>Age:</label><br></br>
-            <input type='number' id='age' min= '18' name='age' value={age} onChange={event => setAge(event.target.value)}></input><br></br>
+            <input type='number' id='age' min= '18' max= '100' name='age' value={age} onChange={event => setAge(event.target.value)}></input><br></br>
             </div>
 
             <div>
@@ -298,9 +298,9 @@ const Auth = () => {
             <div>
             <label htmlFor='ageInterest'>Which ages are you interested in?</label><br></br>
             <label htmlFor='ageMin'>Minimum age</label><br></br>
-            <input type='number' id='ageMin' min= '18' name='ageInterest' value={ageMin} onChange={event => setAgeMin(event.target.value)}></input><br></br>
+            <input type='number' id='ageMin' min= '18' max ='100' name='ageInterest' value={ageMin} onChange={event => setAgeMin(event.target.value)}></input><br></br>
             <label htmlFor='ageMax'>Maximum age</label><br></br>
-            <input type='number' id='ageMax' min= '18' name='ageInterest' value={ageMax} onChange={event => setAgeMax(event.target.value)}></input>
+            <input type='number' id='ageMax' min= '18' max='100' name='ageInterest' value={ageMax} onChange={event => setAgeMax(event.target.value)}></input>
             <br></br>
             </div>
 
