@@ -9,6 +9,7 @@ import Navigation from './shared/components/Navigation/Navigation'
 import Matches from './match/pages/Matches';
 import Auth from './user/pages/Auth';
 import AdminStats from './admin/pages/adminStats';
+import Homepage from './user/pages/Homepage';
 
 // imports the authorisation context
 import { AuthContext } from './shared/context/Auth-context'
@@ -113,15 +114,23 @@ const App = () => {
           <Matches />
         </Route>
 
+        <Route path='/matching/:userID' exact>
+          <Matching/>
+        </Route>
+
         {/*Our front page which will include matching*/}
-        <Route path='/' exact>
-          <Matching />
+        <Route path='/homepage/:userID' exact>
+          <Homepage />
         </Route>
         {/*
         Redirect at the end for if the user writes an invalid url while being logged in,
         it redirects them to the frontpage
+        
         */}
+        
         <Redirect to='/' />
+            
+
       </React.Fragment>
     );
   } else {
