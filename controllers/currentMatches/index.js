@@ -11,9 +11,14 @@ const executeSQL = (context,userId) => {
     const connection = new Connection(config);
 
     // create command to be executed
-    const request = new Request(`SELECT id, first_name, last_name,city, age, description from dating.eksempel.tinder_user
-    INNER JOIN dating.eksempel.match ON (dating.eksempel.match.user_id_2 = dating.eksempel.tinder_user.id)
-    WHERE dating.eksempel.match.user_id_1 = ${userId} OR dating.eksempel.match.user_id_2 = ${userId}
+    const request = new Request(`SELECT theUser.id, theUser.first_name, theUser.last_name, theUser.city, theUser.age, theUser.gender, theUser.gender_interest, theUser.description
+    FROM dating.eksempel.tinder_user AS theUser
+    INNER JOIN dating.eksempel.match AS matches ON matches.user_id_2 = theUser.id OR matches.user_id_1 = theUser.id
+    WHERE matches.user_id_1 = ${userId} OR matches.user_id_2 = ${userId}
+    EXCEPT
+    SELECT id, first_name, last_name, city, age, gender, gender_interest, description
+    FROM dating.eksempel.tinder_user
+    WHERE id = ${userId}
     FOR JSON PATH`, function(err){
         if (err){
             context.log.error(err);

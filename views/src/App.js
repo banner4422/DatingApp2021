@@ -73,7 +73,7 @@ const App = () => {
         <Route path='/admin/matches' exact>
           <Matches />
         </Route>
-        <Redirect to='/admin' />
+        <Redirect to='/admin/stats' />
       </React.Fragment>
     );
   // if the user is logged in

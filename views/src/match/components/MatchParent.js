@@ -31,11 +31,11 @@ const MatchParent = props => {
         <Match 
         key={match.id} 
         id={match.id} 
-        username={match.username} 
+        name={match.first_name + ' ' + match.last_name} 
         age={match.age}
         gender={match.gender}
-        location={match.location} 
-        date={match.date} 
+        gender_interest={match.gender_interest}
+        city={match.city} 
         description={match.description} 
         />
         ))}

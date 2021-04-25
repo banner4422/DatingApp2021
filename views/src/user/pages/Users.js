@@ -57,6 +57,12 @@ const Users = () => {
         GET();
     }, []);
 
+    if (loading) {
+        return (<div className='center'>
+          <h2>LOADING</h2>
+        </div>)
+      }
+
   return <div className='Users'>
       {loading}
       <div>
