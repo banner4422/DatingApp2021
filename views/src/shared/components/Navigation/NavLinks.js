@@ -49,11 +49,6 @@ const NavLinks = props => {
             <NavLink to='/admin/users' exact>Users</NavLink>
         </li>
         )}
-        {auth.isLoggedIn && auth.is_admin && (
-        <li>
-            <NavLink to='/admin/matches' exact>Matches</NavLink>
-        </li>
-        )}
         {/* If the user is not logged in */}
         {!auth.isLoggedIn && !auth.is_admin && (
         <li>
