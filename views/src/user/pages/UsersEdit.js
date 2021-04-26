@@ -3,8 +3,9 @@ import { useParams, useHistory, Link } from 'react-router-dom';
 import { AuthContext } from '../../shared/context/Auth-context';
 import { useForm } from "react-hook-form";
 import './Users.css'
+import loadingGIF from '../../shared/components/loadingGIF.gif'
 
-const UsersEdit2 = () => {
+const UsersEdit = () => {
     // react-hook-form functionalities
     const { register, handleSubmit } = useForm();
     // auth route
@@ -192,7 +193,11 @@ const UsersEdit2 = () => {
                 throw new Error(responseData.message);
                 }
                 setLoading(false);
+                if (auth.is_admin === true) {
+                    history.push(`/admin/users`)
+                } else {
                 history.push(`/user/${auth.userID}`)
+            }
         } catch (err) {}
       };
 
@@ -203,10 +208,17 @@ const UsersEdit2 = () => {
         </div>)
       }
     // meanwhile it loads, required for it to load properly
-      if (loading) {
-        return (<div className='center'>
-          <h2>LOADING</h2>
-        </div>)
+    if (loading) {
+        return (
+            <React.Fragment>
+            <div className='center'>
+                <h1>Loading</h1>
+                </div>
+                <div className='center'>
+              <img src={loadingGIF} alt="loading..." />
+              </div>
+            </React.Fragment>
+            )
       }
     // the actual page
     return <div className='Users'>
@@ -309,18 +321,18 @@ const UsersEdit2 = () => {
         </form>
         <div>
             {/* A button that links back to the user info*/}
-            <Link to={`/user/${auth.userID}`}>
+            <Link to={auth.is_admin ? `/admin/users` : `/user/${auth.userID}`}>
               <button>Go back with no changes</button>
             </Link>
         </div>
         <br></br>
         <div>
             {/* A button that links back to the user info*/}
-            <Link to={`/user/delete/${auth.userID}`}>
+            {auth.is_admin ? null : <Link to={`/user/delete/${auth.userID}`}>
               <button>Do you want to delete your user?</button>
-            </Link>
+            </Link>}
         </div>
     </div>
 }
 
-export default UsersEdit2;
+export default UsersEdit;

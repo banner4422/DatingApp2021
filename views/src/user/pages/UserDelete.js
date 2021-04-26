@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { useParams, useHistory, Link } from 'react-router-dom';
 import { AuthContext } from '../../shared/context/Auth-context';
 import './Users.css'
+import loadingGIF from '../../shared/components/loadingGIF.gif'
 
 const UserDelete = () => {
     const [loading, setLoading] = useState(false);
@@ -32,9 +33,20 @@ const UserDelete = () => {
             history.push(`/auth`)
             // when token is implement we'll use window.location.reload() instead
         };
-
+    
+    if (loading) {
+        return (
+            <React.Fragment>
+            <div className='center'>
+                <h1>Loading</h1>
+                </div>
+                <div className='center'>
+                <img src={loadingGIF} alt="loading..." />
+                </div>
+            </React.Fragment>
+            )
+        }
     return <div div className='Users'>
-        {loading}
         <h1>Deleting your account</h1>
         <h3>Are you sure that you want to delete your account?</h3>
         <div>

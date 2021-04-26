@@ -2,6 +2,7 @@ import React, { useState, useContext,  useEffect} from 'react';
 import { useParams} from 'react-router-dom';
 import './Homepage.css'
 import { AuthContext } from '../../shared/context/Auth-context'
+import loadingGIF from '../../shared/components/loadingGIF.gif'
 
 const Homepage = () => {
     const [loading, setLoading] = useState(false);
@@ -30,8 +31,19 @@ const Homepage = () => {
         GET();
     }, []);
 
+    if (loading) {
+        return (
+            <React.Fragment>
+            <div className='center'>
+                <h1>Loading</h1>
+                </div>
+                <div className='center'>
+              <img src={loadingGIF} alt="loading..." />
+              </div>
+            </React.Fragment>
+            )
+      }
     return <div className='Users'>
-      {loading}
       <div>
       <h1>Welcome Back, {fullName} ! </h1>
       </div>

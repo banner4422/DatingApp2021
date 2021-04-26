@@ -12,10 +12,34 @@ const executeSQL = (context,userId) => {
 
     // create command to be executed
     const request = new Request(`
-        SELECT tinder_user.id, first_name, last_name, city, age, interest, gender, description, gender_interest, age_interest_min, age_interest_max, email, password, is_admin
-    from dating.eksempel.tinder_user
-    INNER JOIN dating.eksempel.[user]
-    ON dating.eksempel.tinder_user.id = dating.eksempel.[user].id
+    SELECT
+       theUser.id,
+       tinder.first_name,
+       tinder.last_name,
+       tinder.city,
+       tinder.age,
+       intrst.interest,
+       gender.gender,
+       tinder.description,
+       genderIntrst.gender_interest,
+       tinder.age_interest_min,
+       tinder.age_interest_max,
+       theUser.email,
+       theUser.password,
+       theUser.is_admin,
+       count(DISTINCT match.id) AS matches
+FROM dating.eksempel.tinder_user AS tinder
+INNER JOIN dating.eksempel.[user] AS theUser
+    ON tinder.id = theUser.id
+INNER JOIN dating.eksempel.interest AS intrst
+    ON tinder.interest = intrst.id
+INNER JOIN dating.eksempel.gender AS gender
+    ON tinder.gender = gender.id
+INNER JOIN dating.eksempel.gender_interest AS genderIntrst
+    ON tinder.gender_interest = genderIntrst.id
+LEFT JOIN dating.eksempel.match AS match
+    ON tinder.id = match.user_id_1 OR tinder.id = match.user_id_2
+GROUP BY theUser.id, tinder.first_name, tinder.last_name, tinder.city, tinder.age, intrst.interest, gender.gender, tinder.description, genderIntrst.gender_interest, tinder.age_interest_min, tinder.age_interest_max, theUser.email, theUser.password, theUser.is_admin
     FOR JSON PATH`, function(err){
         if (err){
             context.log.error(err);

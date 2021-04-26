@@ -2,6 +2,7 @@ import React, { useState, useEffect} from 'react';
 //import UserParent from '../components/UserParent';
 import { useParams, Link } from 'react-router-dom';
 import './Users.css'
+import loadingGIF from '../../shared/components/loadingGIF.gif'
 
 {/*
 Renders the current information for the logged in user
@@ -58,9 +59,16 @@ const Users = () => {
     }, []);
 
     if (loading) {
-        return (<div className='center'>
-          <h2>LOADING</h2>
-        </div>)
+        return (
+            <React.Fragment>
+            <div className='center'>
+                <h1>Loading</h1>
+                </div>
+                <div className='center'>
+              <img src={loadingGIF} alt="loading..." />
+              </div>
+            </React.Fragment>
+            )
       }
 
   return <div className='Users'>
