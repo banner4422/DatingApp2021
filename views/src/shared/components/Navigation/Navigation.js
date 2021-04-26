@@ -17,7 +17,16 @@ This navigation header file is used in ../../../App.js
 const Navigation = props => {
 
     const auth = useContext(AuthContext);
-
+    if (!auth.userID) {
+        return <Header>
+        <h1 className='navigation-title'>
+            <Link to='/auth'>Dating App (MVP)</Link>
+        </h1>
+        <nav className='navigation-header-nav'>
+            <NavLinks />
+        </nav>
+    </Header>
+    } else {
     return <Header>
         <h1 className='navigation-title'>
             <Link to={auth.is_admin ? '/admin/stats' : `/homepage/${auth.userID}`}>Dating App (MVP)</Link>
@@ -26,6 +35,7 @@ const Navigation = props => {
             <NavLinks />
         </nav>
     </Header>
+    }
 };
 
 export default Navigation;

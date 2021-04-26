@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import './Auth.css'
 import { AuthContext } from '../../shared/context/Auth-context'
+import { useHistory } from 'react-router-dom';
 
 {/*
 The login/signup page
@@ -117,6 +118,8 @@ const Auth = () => {
         GET();
     }, []);
 
+    const history = useHistory();
+
     // changes the mode, if the user wants to sign up or log in
     // if the user clicks login, it will only show Email and Password input fields
     // if the user clicks signup, it will show all input fields.
@@ -168,6 +171,7 @@ const Auth = () => {
             setLoading(false);
             // log the user in with the userID from the responseData
             auth.login(responseData[0].value)
+            history.push(`/homepage/${responseData[0].value}`)
         }
             } catch (err) {
                 // catch error if it couldn't even connect to the API route for some reason
@@ -215,6 +219,7 @@ const Auth = () => {
             setLoading(false);
             // log the user in after signing up, by using their userID
             auth.login(responseData[0].value);
+            history.push(`/homepage/${responseData[0].value}`);
             } catch (err) {
                 // catch error if it couldn't even connect to the API route for some reason
                 setLoading(false);
