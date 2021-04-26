@@ -1,253 +1,326 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useParams, useHistory, Link } from 'react-router-dom';
 import { AuthContext } from '../../shared/context/Auth-context';
-import Notification from '../../shared/components/Notification'
+import { useForm } from "react-hook-form";
+import './Users.css'
 
-import './UsersEdit.css'
+const UsersEdit2 = () => {
+    // react-hook-form functionalities
+    const { register, handleSubmit } = useForm();
+    // auth route
+    const auth = useContext(AuthContext);
+    // loading state
+    const [loading, setLoading] = useState(false);
+    // history to link back
+    const history = useHistory();
 
-{/*
-The user edit page, where the logged in user can edit their information
+    // states for existing data
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [city, setCity] = useState('');
+    const [age, setAge] = useState('');
+    const [interest, setInterest] = useState('');
+    const [gender, setGender] = useState('');
+    const [description, setDescription] = useState('');
+    const [genderInterest, setGenderInterest] = useState('');
+    const [ageMin, setAgeMin] = useState('');
+    const [ageMax, setAgeMax] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
-It's used by ../../App.js
+    // default values for preview
+    const defaultValues = {
+        firstName: firstName,
+        lastName: lastName,
+        city: city,
+        age: age,
+        interest: interest,
+        gender: gender,
+        description: description,
+        genderInterest: genderInterest,
+        ageMin: ageMin,
+        ageMax: ageMax,
+        email: email,
+        password: password
+    }
 
-Besides React, this file specifically make use of useState and useEffect, which are both hooks (https://reactjs.org/docs/hooks-state.html#whats-a-hook)
-Hooks basically makes it possible to use various React features without writing a class specifying what features to use
+    // options being fetched
+    const [genderFetch, setGenderFetch] = useState([]);
+    const [genderInterestFetch, setGenderInterestFetch] = useState([]);
+    const [interestFetch, setinterestFetch] = useState([]);
 
-useState() & setState() is where you store property values that belongs to the component.
-When the state object changes, the component re-renders.
-The comments below explains for each useState case
+    // fetches genders
+    useEffect (() => {
+        const GET = async () => {
+            setLoading(true);
+            try {
+                const response = await fetch('http://' + process.env.REACT_APP_backend + '/api/getGenders');
+                const results = await response.json();
+                if(!response.ok) {
+                    throw new Error(results.message);
+                }
+                setGenderFetch(results);
+            } catch (err) {
+                console.log(err)
+            }
+            setLoading(false)
+        };
+        GET();
+    }, []);
 
-useEffect() - By using this Hook, you tell React that your component needs to do something after render. 
-React will remember the function you passed (we’ll refer to it as our “effect”), and call it later after performing the DOM updates
-So e.g. the useEffect() in ../../match/pages/Matches fetches the matches for the user
-If the user deletes a match, it re-renders the page (because of useState()) and then useEffect fetches once again
+    // fetches the gender_Interest table from /api/getInterest, or ../../../../getInterest/index
+    useEffect (() => {
+        const GET = async () => {
+            setLoading(true);
+            try {
+                const response = await fetch('http://' + process.env.REACT_APP_backend + '/api/getInterest');
+                const results = await response.json();
+                if(!response.ok) {
+                    throw new Error(results.message);
+                }
+                setinterestFetch(results);
+            } catch (err) {
+                console.log(err)
+            }
+            setLoading(false)
+        };
+        GET();
+    }, []);
 
-*/}
+    // fetches the gender_Interest table from /api/getGenderInterest, or ../../../../getGenderInterest/index
+    useEffect (() => {
+        const GET = async () => {
+            setLoading(true);
+            try {
+                const response = await fetch('http://' + process.env.REACT_APP_backend + '/api/getGenderInterest');
+                const results = await response.json();
+                if(!response.ok) {
+                    throw new Error(results.message);
+                }
+                setGenderInterestFetch(results);
+            } catch (err) {
+                console.log(err)
+            }
+            setLoading(false)
+        };
+        GET();
+    }, []);
 
-const UsersEdit = () => {
-  // get the Authorization context, or in other words, the user logged in
-    // useContext provides a way to pass data through the component tree without having to pass props down manually at every level.
-    // read more here https://reactjs.org/docs/hooks-reference.html#usecontext 
-  const auth = useContext(AuthContext);
+    // userid from url
+    const userID = useParams().userID;
 
-  // Manages the state of fetching the API data, very important.
-  // Because if it wasn't implemented, the page would fail to render data because it looks after the data instantly
-  // which would end up as undefined because the data isn't loaded yet
-  // when manging the state of loading the data, it delays rendering elements till they are loaded and defined in (setUserload)
-  const [loading, setLoading] = useState(false);
+    // fetches existing user data
+    useEffect (() => {
+        const GET = async () => {
+            setLoading(true);
+            try {
+                const response = await fetch('http://' + process.env.REACT_APP_backend +`/api/TinderUserGetFullByID?id=${userID}`);
+                const results = await response.json();
+                if(!response.ok) {
+                    throw new Error(results.message);
+                }
+                console.log(results)
+                setFirstName(results[1].value);
+                setLastName(results[2].value)
+                setCity(results[3].value);
+                setAge(results[4].value);
+                setInterest(results[5].value);
+                setGender(results[6].value);
+                setDescription(results[7].value);
+                setGenderInterest(results[8].value);
+                setAgeMin(results[9].value);
+                setAgeMax(results[10].value);
+                setEmail(results[11].value);
+                setPassword(results[12].value);
+            } catch (err) {
+                console.log(err)
+            }
+            setLoading(false)
+        };
+        GET();
+    }, []);
 
-  // the state of the loaded logged in user, loads their information
-  // setUserLoad is the user information fetched by the API below
-  // userLoad contains the fetched data
-  const [userLoad, setUserLoad] = useState();
-
-  // The useHistory hook gives you access to the history instance that you may use to navigate.
-  // it's used to redirect to a page after an action e.g. redirecting to the login/signup page after deleting the user
-  // https://reactrouter.com/web/api/Hooks/usehistory
-  const history = useHistory();
-
-  // useStates for the POST request
-  // it takes what the user writes in the inputs and set the state for what's written in the input
-  // then e.g. the username can be used in the POST request where its value is what the user wrote
-  const [username, setUsername] = useState('');
-  const [age, setAge] = useState('');
-  const [gender, setGender] = useState('Female');
-  const [genderInterest, setGenderInterest] = useState('Female');
-  const [location, setLocation] = useState('');
-  const [description, setDescription] = useState('');
-
-  // it should've been possible to fetch the already existing data and just change in that,
-  // but i couldn't make it work when i worked on this previously
-  // may be possible to do now
-
-  // useParams()returns an object of key/value pairs of URL parameters.
-  // so this object takes the userID of the logged in user, and uses it to fetch their information
-  const userID = useParams().userID;
-
-  //Manages the state of the notification
-  //Read more about notifcations in ../../shared/components/Notification
-  const [showNoti, setNoti] = useState(false);
-    const openNoti = () => setNoti(true);
-    const closeNoti = () => setNoti(false);
-    // delete user function
-    // used by the button below
-    const deleteUser = async () => {
-        setNoti(false);
-        // we are now sending data, so setLoading = true
-        setLoading(true);
+    /*
+    const onSubmit = (data) => {
+        alert(JSON.stringify({
+            yourID: userID, 
+            firstName: data.firstName,
+            lastName: data.lastName,
+            age: data.age,
+            gender: data.genderList,
+            genderInterest: data.genderInterestList,
+            interest: data.interestList,
+            ageInterestMin: data.ageMin,
+            ageInterestMax: data.ageMax,
+            city: data.city,
+            description: data.description,
+            email: data.email,
+            password: data.password,
+        }));
+      };
+      */
+    
+    // patch/update function, which gets used by handleSubmit and onSubmit
+    const userUpdateInfo = async (data) => {
+        // event.preventDefault is implemented ''under the hood'' of the handleSubmit method from react-hook-form https://labs.thisdot.co/blog/taming-forms-with-react-hook-form
         try {
-          const response = await fetch('http://localhost:' + process.env.REACT_APP_backendPort +`/api/user/${userID}`, {
-                    method: 'DELETE',
+        
+          const response = await fetch('http://' + process.env.REACT_APP_backend + '/api/tinderUserUpdate', {
+                    method: 'PATCH',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     mode: 'cors',
+                    body: JSON.stringify({
+                    yourID: userID, 
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                    age: data.age,
+                    gender: data.genderList,
+                    genderInterest: data.genderInterestList,
+                    interest: data.interestList,
+                    ageInterestMin: data.ageMin,
+                    ageInterestMax: data.ageMax,
+                    city: data.city,
+                    description: data.description,
+                    email: data.email,
+                    password: data.password,
+                    })
                 });
                 const responseData = await response.json();
                 if (!response.ok) {
-                  // if connection was made with the server, but it couldn't deleted cuz of perhaps an invalid userID
                 throw new Error(responseData.message);
                 }
-                // we are now done sending data, so setLoading = false
                 setLoading(false);
-                // redirect the user to the login/signup page
-                // may need to assign that they're logged out through the Auth-context
-                history.push(`/auth`)
-                // catch error if it couldn't connect to the server for some reason
+                history.push(`/user/${auth.userID}`)
         } catch (err) {}
-    };
+      };
 
-  //fetches logged in user
-  useEffect (() => {
-    const GET = async () => {
-        // we are now fetching data, so setLoading = true
-        setLoading(true);
-        try {
-            const response = await fetch('http://localhost:' + process.env.REACT_APP_backendPort +`/api/user/${userID}`);
-            const results = await response.json();
-            if(!response.ok) {
-              // if connection was made with the server, but it couldn't fetch the user data cuz of perhaps an invalid userID ????
-                throw new Error(results.message);
-            }
-            // sets the userLoad state to the fetched data of the logged in user
-            setUserLoad(results.user);
-        } catch (err) {
-            // catch error if it couldn't connect to the server for some reason
-            console.log(err)
-        }
-        // we are now done fetching data, so setLoading = false
-        setLoading(false)
-    };
-    // we call our function
-    GET();
-    // second array argument are explained here https://reactjs.org/docs/hooks-effect.html#tip-optimizing-performance-by-skipping-effects 
-}, [userID]);
-
-//updates user being logged in
-  const userUpdateInfo = async event => {
-    // avoids refreshing the page when it's patching
-    // https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault 
-    event.preventDefault();
-    try {
-      const response = await fetch('http://localhost:' + process.env.REACT_APP_backendPort +`/api/user/info/${userID}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                mode: 'cors',
-                body: JSON.stringify({
-                  username,
-                    age,
-                    gender,
-                    genderInterest,
-                    location,
-                    description
-                })
-            });
-            const responseData = await response.json();
-            if (!response.ok) {
-                            // if connection was made with the server, but it couldn't fetch the user data cuz of perhaps an invalid userID ????
-            throw new Error(responseData.message);
-            }
-            // we are now done patching data, so setLoading = false
-            setLoading(false);
-            // redirect the user to the user info page, where the updated info should be fetched
-            history.push(`/user/${auth.userID}`)
-    // catch error if it couldn't connect to the server for some reason
-    } catch (err) {}
-  };
-  // If the user couldn't be loaded for some reason
-  if (!userLoad) {
-    return (<div className='center'>
-      <h2>Could not find user, ERROR</h2>
-    </div>)
-  }
-
-  return (
-    <React.Fragment>
-      {/* 
-      Notification popup if the user wants to delete their user or not
-      Scuffed notification cuz the rest of the update info inputs are further down the page LOL
-      Perhaps it should've managed the state of if the user wants to delete their account or not
-      an if statement with the two returns?
-       */}
-      <Notification 
-            show={showNoti}
-            header={userLoad.username}
-            contentClass='user-edit__notification-content'
-            footerClass='user-edit__notification-actions'
-            footer={
-                <div>
-            <button onClick={closeNoti}>No</button>
-            <button onClick={deleteUser}>Yes</button>
-            </div>}
-            >
-                <div className='.user-edit__notification-content2'>
-                    <h2>Delete your user?</h2>
-                    <p>Are you sure that you want to delete your user?</p>
-                </div>
-        </Notification>
-      {/* When the user info is done loading and the user info is loaded */}
-      {!loading && userLoad && (
-        <div className='user-edit-info'>
-        <form onSubmit={userUpdateInfo}>
-          <div>
-            <label for='username'>Username:</label><br></br>
+    // if the user can't be loaded for some reason
+    if (!firstName) {
+        return (<div className='center'>
+          <h2>Could not find user, ERROR</h2>
+        </div>)
+      }
+    // meanwhile it loads, required for it to load properly
+      if (loading) {
+        return (<div className='center'>
+          <h2>LOADING</h2>
+        </div>)
+      }
+    // the actual page
+    return <div className='Users'>
+        <form id='theData' onSubmit={handleSubmit(userUpdateInfo)}>
+            <div>
+            <div>
+            <label htmlFor='firstName'>First Name</label><br></br>
             {/* The onChange function updates the state based on user input, same goes for the others below */}
-            <input type='text' id='username' name='username' value={username} onChange={event => setUsername(event.target.value)}></input><br></br>
-            </div>
-            <div>
-            <label for='age'>Age:</label><br></br>
-            <input type='text' id='age' name='age' value={age} onChange={event => setAge(event.target.value)}></input><br></br>
+            <input type='text' id='firstName' name='firstName' defaultValue={defaultValues.firstName} placeholder='First Name' {...register('firstName')} /><br></br>
             </div>
 
             <div>
-            <label for='gender'>Gender:</label><br></br>
-            <label for='female'>Female</label>
-            <input type='radio' id='female' name='gender' checked={gender === 'Female'} value='Female' onChange={event => setGender(event.target.value)}></input><br></br>
-            <label for='male'>Male</label>
-            <input type='radio' id='male' name='gender' checked={gender === 'Male'} value='Male' onChange={event => setGender(event.target.value)}></input><br></br>
+            <label htmlFor='lastName'>Last Name</label><br></br>
+            {/* The onChange function updates the state based on user input, same goes for the others below */}
+            <input type='text' id='lastName' name='lastName' defaultValue={defaultValues.lastName} placeholder='Last Name' {...register('lastName')}></input><br></br>
             </div>
 
             <div>
-            <label for='genderInterest'>Interested in:</label><br></br>
-            <label for='femaleInterest'>Females</label>
-            <input type='radio' id='femaleInterest' name='genderInterest' value='Female' onChange={event => setGenderInterest(event.target.value)}></input><br></br>
-            <label for='maleInterest'>Males</label>
-            <input type='radio' id='maleInterest' name='genderInterest' value='Male' onChange={event => setGenderInterest(event.target.value)}></input><br></br>
-            <label for='both'>Both</label>
-            <input type='radio' id='both' name='genderInterest' value='Both' onChange={event => setGenderInterest(event.target.value)}></input><br></br>
+            <label htmlFor='age'>Age:</label><br></br>
+            <input type='number' id='age' min= '18' max= '100' name='age' defaultValue={defaultValues.age} {...register('age')}></input><br></br>
             </div>
 
-
+            
             <div>
-            <label for='location'>Location:</label><br></br>
-            <input type='text' id='location' name='location' value={location} onChange={event => setLocation(event.target.value)}></input><br></br>
+            <label htmlFor='genderList'>Your gender is ...</label><br></br>
+                <select form='theData' id='genderList' name='genderList' defaultValue={defaultValues.gender} required {...register('genderList')}>
+                <option value="" selected disabled hidden>Your gender</option>
+                {
+                genderFetch.map(result => 
+                    {
+                    return(
+                    <option value={result.id}>{result.gender}</option>
+                    )
+                }
+                )
+                }
+            </select><br></br>
+            </div>
+            
+            <div>
+            <label htmlFor='genderInterestList'>You are interested in what gender?</label><br></br>
+                <select form='theData' id='genderInterestList' name='genderInterestList' defaultValue={defaultValues.genderInterest} required {...register('genderInterestList')}>
+                <option value="" selected disabled hidden>Who?</option>  
+                {
+                genderInterestFetch.map(result => 
+                    {
+                    return(
+                    <option value={result.id}>{result.gender_Interest}</option>
+                    )
+                }
+                )
+                }
+            </select><br></br>
             </div>
 
             <div>
-            <label for='description'>Description:</label><br></br>
-            <input type='text' id='description' name='description' value={description} onChange={event => setDescription(event.target.value)}></input><br></br><br></br>
+            <label htmlFor='interestList'>You are interested in</label><br></br>
+                <select form='theData' id='interestList' name='interestList' defaultValue={defaultValues.interest} required {...register('interestList')}>
+                <option value="" selected disabled hidden>Which interest matches you?</option>
+                {
+                interestFetch.map(result => 
+                    {
+                    return(
+                    <option value={result.id}>{result.interest}</option>
+                    )
+                }
+                )
+                }
+            </select><br></br>
             </div>
 
             <div>
-            <input type="submit" value='Save user changes'></input><br></br><br></br>
+            <label htmlFor='ageInterest'>Which ages are you interested in?</label><br></br>
+            <label htmlFor='ageMin'>Minimum age</label><br></br>
+            <input type='number' id='ageMin' min= '18' max ='100' name='ageMin' defaultValue={defaultValues.ageMin} {...register('ageMin')}></input><br></br>
+            <label htmlFor='ageMax'>Maximum age</label><br></br>
+            <input type='number' id='ageMax' min= '18' max='100' name='ageMax' defaultValue={defaultValues.ageMax} {...register('ageMax')}></input>
+            <br></br>
+            </div>
+
+            <div>
+            <label htmlFor='city'>City</label><br></br>
+            <input type='text' id='city' name='city' defaultValue={defaultValues.city} {...register('city')}></input><br></br>
+            </div>
+
+            <div>
+            <label htmlFor='description'>Description:</label><br></br>
+            <input type='text' id='description' name='description' defaultValue={defaultValues.description} {...register('description')}></input><br></br>
             </div>
             <div>
+            <label htmlFor='email'>Email:</label><br></br>
+            <input type='email' id='email' name='email' defaultValue={defaultValues.email} {...register('email')}></input><br></br>
+            </div>
+            <div>
+            <label htmlFor='password'>Password:</label><br></br>
+            <input type='password' id='password' name='password' defaultValue={defaultValues.password} {...register('password')}></input><br></br><br></br>
+            </div>
+            <input type="submit" value='Update info'></input>
+            </div>
+        </form>
+        <div>
             {/* A button that links back to the user info*/}
             <Link to={`/user/${auth.userID}`}>
               <button>Go back with no changes</button>
             </Link>
-            </div>
-            {/* Button for if the user wants to delete their account*/}
-            <div>
-              <button onClick={openNoti}>Delete user</button>
-            </div>
-        </form>
         </div>
-      )}
-    </React.Fragment>
-  );
-};
+        <br></br>
+        <div>
+            {/* A button that links back to the user info*/}
+            <Link to={`/user/delete/${auth.userID}`}>
+              <button>Do you want to delete your user?</button>
+            </Link>
+        </div>
+    </div>
+}
 
-export default UsersEdit;
+export default UsersEdit2;

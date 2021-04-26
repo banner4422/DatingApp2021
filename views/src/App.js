@@ -4,6 +4,7 @@ import { BrowserRouter,  Route, Redirect, Switch } from 'react-router-dom';
 // imports all the possible pages and headers in the application
 import Users from './user/pages/Users';
 import UsersEdit from './user/pages/UsersEdit';
+import UserDelete from './user/pages/UserDelete';
 import Matching from './match/pages/Matching';
 import Navigation from './shared/components/Navigation/Navigation'
 import Matches from './match/pages/Matches';
@@ -99,6 +100,9 @@ const App = () => {
         </Route>
         <Route path='/user/edit/:userID' exact>
           <UsersEdit />
+        </Route>
+        <Route path='/user/delete/:userID' exact>
+          <UserDelete />
         </Route>
         {/*user page routes - commented out
         <Route path='/user/edit/email/:userID' exact>

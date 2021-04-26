@@ -34,9 +34,10 @@ const MatchParent = props => {
         name={match.first_name + ' ' + match.last_name} 
         age={match.age}
         gender={match.gender}
-        gender_interest={match.gender_interest}
+        gender_Interest={match.gender_Interest}
         city={match.city} 
-        description={match.description} 
+        description={match.description}
+        interest={match.interest}
         />
         ))}
     </ul>);

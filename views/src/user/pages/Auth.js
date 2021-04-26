@@ -70,6 +70,7 @@ const Auth = () => {
                     throw new Error(results.message);
                 }
                 setGenderFetch(results);
+                console.log(results)
             } catch (err) {
                 console.log(err)
             }
