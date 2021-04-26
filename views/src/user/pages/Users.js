@@ -47,8 +47,8 @@ const Users = () => {
                 setGenderInterest(results[8].value);
                 setAgeMin(results[9].value);
                 setAgeMax(results[10].value);
-                setEmail(results[12].value);
-                setPassword(results[13].value);
+                setEmail(results[11].value);
+                setPassword(results[12].value);
             } catch (err) {
                 console.log(err)
             }
