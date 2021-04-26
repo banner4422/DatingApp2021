@@ -72,10 +72,6 @@ const App = () => {
         <Route path='/admin/users' exact>
           <AdminUsers />
         </Route>
-        {/*Matches page*/}
-        <Route path='/admin/matches' exact>
-          <Matches />
-        </Route>
         <Route path='/user/edit/:userID' exact>
           <UsersEdit />
         </Route>
