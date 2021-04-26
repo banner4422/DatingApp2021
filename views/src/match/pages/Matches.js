@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import MatchParent from '../components/MatchParent';
 import { useParams } from 'react-router-dom';
+import loadingGIF from '../../shared/components/loadingGIF.gif'
 
 {/*
 This file can only be accessed with authorised access through being logged in, as defined in ../../App
@@ -69,10 +70,17 @@ const Matches = () => {
 
     // if a user doesn't have matches (userLoad is empty of objects)
     if (loading) {
-        return (<div className='center'>
-          <h2>LOADING</h2>
-        </div>)
-      }
+      return (
+          <React.Fragment>
+          <div className='center'>
+              <h1>Loading</h1>
+              </div>
+              <div className='center'>
+            <img src={loadingGIF} alt="loading..." />
+            </div>
+          </React.Fragment>
+          )
+    }
 
     if (!userLoad) {
         return (<div className='center'>

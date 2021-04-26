@@ -10,6 +10,7 @@ import Navigation from './shared/components/Navigation/Navigation'
 import Matches from './match/pages/Matches';
 import Auth from './user/pages/Auth';
 import AdminStats from './admin/pages/adminStats';
+import AdminUsers from './admin/pages/adminUsers';
 import Homepage from './user/pages/Homepage';
 
 // imports the authorisation context
@@ -69,11 +70,14 @@ const App = () => {
         </Route>
         {/*User page*/}
         <Route path='/admin/users' exact>
-          <Matches />
+          <AdminUsers />
         </Route>
         {/*Matches page*/}
         <Route path='/admin/matches' exact>
           <Matches />
+        </Route>
+        <Route path='/user/edit/:userID' exact>
+          <UsersEdit />
         </Route>
         <Redirect to='/admin/stats' />
       </React.Fragment>
