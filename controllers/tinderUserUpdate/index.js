@@ -34,8 +34,8 @@ async function patch(context, req) {
         //  let payload = new TinderUser(req.body.email, req.body.password, req.body.firstName, req.body.lastName, req.body.city, req.body.age, req.body.interest, req.body.gender, req.body.description, req.body.genderInterest, req.body.ageInterestMin, req.body.ageInterestMax);
         console.log(req.body)
         console.log("nedeunder står req.body.ID")
-        console.log(req.body.yourID)
-        let payload = new TinderUser(req.body.yourID, req.body.email, req.body.password, req.body.firstName, req.body.lastName, req.body.city, req.body.age, req.body.interest, req.body.gender, req.body.description, req.body.genderInterest, req.body.ageInterestMin, req.body.ageInterestMax );
+        console.log(req.body.userID)
+        let payload = new TinderUser(req.body.userID, req.body.email, req.body.password, req.body.firstName, req.body.lastName, req.body.city, req.body.age, req.body.interest, req.body.gender, req.body.description, req.body.genderInterest, req.body.ageInterestMin, req.body.ageInterestMax );
         console.log("her står payload klassen nedeunder")
         console.log(payload)
         
