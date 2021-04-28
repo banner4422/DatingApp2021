@@ -31,7 +31,7 @@ module.exports = async function (context, req) {
     // DELETE
     async function deleteUser(context, req) {
         try{
-            let payload = new TinderUser(req.query.yourID);
+            let payload = new TinderUser(req.query.userID);
             await db.removeUser(payload)
             context.res = {
                 body: {status: "Delete Succes"}

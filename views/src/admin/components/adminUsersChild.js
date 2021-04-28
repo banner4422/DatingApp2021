@@ -10,7 +10,7 @@ const AdminUsersChild = props => {
     const DELETE = async () => {
         setLoading(true);
         try {
-            const response = await fetch('http://' + process.env.REACT_APP_backend + `/api/admiDelete?theirID=${props.id}`, {
+            const response = await fetch('http://' + process.env.REACT_APP_backend + `/api/tinderUserDelete?userID=${props.id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'

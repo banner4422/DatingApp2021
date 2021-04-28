@@ -14,7 +14,7 @@ const UserDelete = () => {
         const DELETE = async () => {
             setLoading(true);
             try {
-                const response = await fetch('http://' + process.env.REACT_APP_backend + `/api/tinderUserDelete?yourID=${userID}`, {
+                const response = await fetch('http://' + process.env.REACT_APP_backend + `/api/tinderUserDelete?userID=${userID}`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json'
