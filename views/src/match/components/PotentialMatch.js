@@ -73,9 +73,11 @@ const PotentialMatch = props => {
       return (
     <li className='poten'>
         <div className='poten-info'>
-        <h2>{props.username}, {props.age}</h2>
-        <h3>{props.gender}</h3>
-        <h3>{props.location}</h3>
+        <h1>Match with a user!</h1>
+        <h2>{props.first_name} {props.last_name}</h2>
+        <h2>Is {props.age} and from {props.city}</h2>
+        <h2>The person is interested in {props.gender_interest} and loves {props.interest}</h2>
+        <h3>Description:</h3>
         <p>{props.description}</p>
         </div>
         <div className='poten-button'>
