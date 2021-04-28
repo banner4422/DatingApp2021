@@ -4,6 +4,7 @@ import { AuthContext } from '../../shared/context/Auth-context';
 import { useForm } from "react-hook-form";
 import './Users.css'
 import loadingGIF from '../../shared/components/loadingGIF.gif'
+import Select from './components/Dropdown'
 
 const UsersEdit = () => {
     // react-hook-form functionalities
@@ -15,30 +16,24 @@ const UsersEdit = () => {
     // history to link back
     const history = useHistory();
 
-    // states for existing data
+    // states for existing data to be used in defaultValues
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [city, setCity] = useState('');
     const [age, setAge] = useState('');
-    const [interest, setInterest] = useState('');
-    const [gender, setGender] = useState('');
     const [description, setDescription] = useState('');
-    const [genderInterest, setGenderInterest] = useState('');
     const [ageMin, setAgeMin] = useState('');
     const [ageMax, setAgeMax] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    // default values for preview
+    // default values for preview to be used in defaultValues
     const defaultValues = {
         firstName: firstName,
         lastName: lastName,
         city: city,
         age: age,
-        interest: interest,
-        gender: gender,
         description: description,
-        genderInterest: genderInterest,
         ageMin: ageMin,
         ageMax: ageMax,
         email: email,
@@ -49,6 +44,14 @@ const UsersEdit = () => {
     const [genderFetch, setGenderFetch] = useState([]);
     const [genderInterestFetch, setGenderInterestFetch] = useState([]);
     const [interestFetch, setinterestFetch] = useState([]);
+    
+    // states for existing data to be used in Selects/dropdown lists
+    const [selectGenderBox, setSelectGenderBox] = useState()
+    const [selectGenderInterestBox, setSelectGenderInterestBox] = useState()
+    const [selectInterestBox, setSelectInterestBox] = useState()
+    console.log(selectGenderBox)
+    console.log(selectGenderInterestBox)
+    console.log(selectInterestBox)
 
     // fetches genders
     useEffect (() => {
@@ -121,18 +124,22 @@ const UsersEdit = () => {
                     throw new Error(results.message);
                 }
                 console.log(results)
+
+                // for defaultValues
                 setFirstName(results[1].value);
                 setLastName(results[2].value)
                 setCity(results[3].value);
                 setAge(results[4].value);
-                setInterest(results[5].value);
-                setGender(results[6].value);
-                setDescription(results[7].value);
-                setGenderInterest(results[8].value);
-                setAgeMin(results[9].value);
-                setAgeMax(results[10].value);
-                setEmail(results[11].value);
-                setPassword(results[12].value);
+                setDescription(results[9].value);
+                setAgeMin(results[12].value);
+                setAgeMax(results[13].value);
+                setEmail(results[14].value);
+                setPassword(results[15].value);
+
+                // for use in dropdowns
+                setSelectGenderBox(results[7].value)
+                setSelectGenderInterestBox(results[10].value)
+                setSelectInterestBox(results[5].value)
             } catch (err) {
                 console.log(err)
             }
@@ -141,25 +148,20 @@ const UsersEdit = () => {
         GET();
     }, []);
 
-    /*
-    const onSubmit = (data) => {
-        alert(JSON.stringify({
-            yourID: userID, 
-            firstName: data.firstName,
-            lastName: data.lastName,
-            age: data.age,
-            gender: data.genderList,
-            genderInterest: data.genderInterestList,
-            interest: data.interestList,
-            ageInterestMin: data.ageMin,
-            ageInterestMax: data.ageMax,
-            city: data.city,
-            description: data.description,
-            email: data.email,
-            password: data.password,
-        }));
-      };
-      */
+    // handles the value event of gender
+    function onChangeGender(event) {
+        setSelectGenderBox(event.target.value);
+    }
+
+    // handles the value event of gender interest
+    function onChangeGenderInterest(event) {
+        setSelectGenderInterestBox(event.target.value);
+    }
+
+    // handles the value event of interest
+    function onChangeInterest(event) {
+        setSelectInterestBox(event.target.value);
+    }
     
     // patch/update function, which gets used by handleSubmit and onSubmit
     const userUpdateInfo = async (data) => {
@@ -177,9 +179,9 @@ const UsersEdit = () => {
                     firstName: data.firstName,
                     lastName: data.lastName,
                     age: data.age,
-                    gender: data.genderList,
-                    genderInterest: data.genderInterestList,
-                    interest: data.interestList,
+                    gender: selectGenderBox,
+                    genderInterest: selectGenderInterestBox,
+                    interest: selectInterestBox,
                     ageInterestMin: data.ageMin,
                     ageInterestMax: data.ageMax,
                     city: data.city,
@@ -201,12 +203,6 @@ const UsersEdit = () => {
         } catch (err) {}
       };
 
-    // if the user can't be loaded for some reason
-    if (!firstName) {
-        return (<div className='center'>
-          <h2>Could not find user, ERROR</h2>
-        </div>)
-      }
     // meanwhile it loads, required for it to load properly
     if (loading) {
         return (
@@ -219,11 +215,20 @@ const UsersEdit = () => {
               </div>
             </React.Fragment>
             )
-      }
+    }
+
+    // if the user can't be loaded for some reason
+    if (!description) {
+        return (<div className='center'>
+          <h2>Could not find user, ERROR</h2>
+        </div>)
+    }
+
     // the actual page
     return <div className='Users'>
         <form id='theData' onSubmit={handleSubmit(userUpdateInfo)}>
             <div>
+
             <div>
             <label htmlFor='firstName'>First Name</label><br></br>
             {/* The onChange function updates the state based on user input, same goes for the others below */}
@@ -241,53 +246,36 @@ const UsersEdit = () => {
             <input type='number' id='age' min= '18' max= '100' name='age' defaultValue={defaultValues.age} {...register('age')}></input><br></br>
             </div>
 
-            
             <div>
             <label htmlFor='genderList'>Your gender is ...</label><br></br>
-                <select form='theData' id='genderList' name='genderList' defaultValue={defaultValues.gender} required {...register('genderList')}>
-                <option value="" selected disabled hidden>Your gender</option>
-                {
-                genderFetch.map(result => 
-                    {
-                    return(
-                    <option value={result.id}>{result.gender}</option>
-                    )
-                }
-                )
-                }
-            </select><br></br>
+            <Select
+            form='theData'
+            id='genderList'
+            name='genderList'
+            value={selectGenderBox}
+            onChange={onChangeGender}
+            data={genderFetch}
+             />
             </div>
-            
+
             <div>
             <label htmlFor='genderInterestList'>You are interested in what gender?</label><br></br>
-                <select form='theData' id='genderInterestList' name='genderInterestList' defaultValue={defaultValues.genderInterest} required {...register('genderInterestList')}>
-                <option value="" selected disabled hidden>Who?</option>  
-                {
-                genderInterestFetch.map(result => 
-                    {
-                    return(
-                    <option value={result.id}>{result.gender_Interest}</option>
-                    )
-                }
-                )
-                }
-            </select><br></br>
+            <Select
+            form='theData' id='genderInterestList' name='genderInterestList'
+            value={selectGenderInterestBox}
+            onChange={onChangeGenderInterest}
+            data={genderInterestFetch}
+             />
             </div>
 
             <div>
             <label htmlFor='interestList'>You are interested in</label><br></br>
-                <select form='theData' id='interestList' name='interestList' defaultValue={defaultValues.interest} required {...register('interestList')}>
-                <option value="" selected disabled hidden>Which interest matches you?</option>
-                {
-                interestFetch.map(result => 
-                    {
-                    return(
-                    <option value={result.id}>{result.interest}</option>
-                    )
-                }
-                )
-                }
-            </select><br></br>
+            <Select
+            form='theData' id='interestList' name='interestList'
+            value={selectInterestBox}
+            onChange={onChangeInterest}
+            data={interestFetch}
+             />
             </div>
 
             <div>
@@ -308,15 +296,19 @@ const UsersEdit = () => {
             <label htmlFor='description'>Description:</label><br></br>
             <input type='text' id='description' name='description' defaultValue={defaultValues.description} {...register('description')}></input><br></br>
             </div>
+
             <div>
             <label htmlFor='email'>Email:</label><br></br>
             <input type='email' id='email' name='email' defaultValue={defaultValues.email} {...register('email')}></input><br></br>
             </div>
+
             <div>
             <label htmlFor='password'>Password:</label><br></br>
             <input type='password' id='password' name='password' defaultValue={defaultValues.password} {...register('password')}></input><br></br><br></br>
             </div>
+
             <input type="submit" value='Update info'></input>
+
             </div>
         </form>
         <div>

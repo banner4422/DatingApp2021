@@ -24,7 +24,7 @@ module.exports.startDb = startDb
 function select(userID){
     return new Promise((resolve, reject) => {
     const sql = `
-    SELECT theUser.id, tinder.first_name, tinder.last_name, tinder.city, tinder.age, intrst.interest, gender.gender, tinder.description, genderIntrst.gender_interest, tinder.age_interest_min, tinder.age_interest_max, theUser.email, theUser.password
+    SELECT theUser.id, tinder.first_name, tinder.last_name, tinder.city, tinder.age, intrst.id, intrst.interest, gender.id, gender.gender, tinder.description, genderIntrst.id, genderIntrst.gender_interest, tinder.age_interest_min, tinder.age_interest_max, theUser.email, theUser.password
     FROM dating.eksempel.tinder_user AS tinder
     INNER JOIN dating.eksempel.[user] AS theUser
         ON tinder.id = theUser.id

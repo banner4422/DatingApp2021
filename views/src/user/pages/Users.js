@@ -42,14 +42,14 @@ const Users = () => {
                 setFullName(results[1].value + ' ' + results[2].value);
                 setCity(results[3].value);
                 setAge(results[4].value);
-                setInterest(results[5].value);
-                setGender(results[6].value);
-                setDescription(results[7].value);
-                setGenderInterest(results[8].value);
-                setAgeMin(results[9].value);
-                setAgeMax(results[10].value);
-                setEmail(results[11].value);
-                setPassword(results[12].value);
+                setInterest(results[6].value);
+                setGender(results[8].value);
+                setDescription(results[9].value);
+                setGenderInterest(results[11].value);
+                setAgeMin(results[12].value);
+                setAgeMax(results[13].value);
+                setEmail(results[14].value);
+                setPassword(results[15].value);
             } catch (err) {
                 console.log(err)
             }
@@ -93,17 +93,5 @@ const Users = () => {
       </div>
   </div>
 };
-
-{/* <h2>{userLoad[1].value} {userLoad[2].value}</h2>
-      <h2>City: {userLoad[3].value}</h2>
-      <h2>Age: {userLoad[4].value}</h2>
-      <h2>Interest: {userLoad[5].value}</h2>
-      <h2>Gender: {userLoad[6].value}</h2>
-      <h2>Description: {userLoad[7].value}</h2>
-      <h2>Interested in: {userLoad[8].value}</h2>
-      <h2>Lowest age: {userLoad[9].value}</h2>
-      <h2>Highest age: {userLoad[10].value}</h2>
-      <h2>Email: {userLoad[12].value}</h2>
-      <h2>Password: {userLoad[13].value}</h2> */}
 
 export default Users;
