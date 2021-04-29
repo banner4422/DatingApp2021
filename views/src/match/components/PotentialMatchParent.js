@@ -29,10 +29,13 @@ const PotentialMatchParent = props => {
         <PotentialMatch 
         key={user.id} 
         id={user.id} 
-        username={user.username} 
+        first_name={user.first_name}
+        last_name={user.last_name}
+        city={user.city}
         age={user.age}
         gender={user.gender}
-        location={user.location}  
+        gender_interest={user.gender_interest}
+        interest={user.interest}
         description={user.description} 
         />
         ))}

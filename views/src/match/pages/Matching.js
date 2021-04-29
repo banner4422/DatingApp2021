@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PotentialMatchParent from '../components/PotentialMatchParent';
+import { useParams } from 'react-router-dom';
 
 {/*shows a potential match. Should only show one potential match at a time, 
 and show a new potential match for every time a button is clicked
@@ -15,16 +16,18 @@ const Matching = () => {
     const [loading, setLoading] = useState(false);
     const [userLoad, setUserLoad] = useState();
 
+    const userID = useParams().userID;
+
     useEffect (() => {
         const GET = async () => {
             setLoading(true);
             try {
-                const response = await fetch('http://localhost:' + process.env.REACT_APP_backendPort +'/api/user/');
+                const response = await fetch('http://' + process.env.REACT_APP_backend + `/api/getPotentialMatches?userID=${userID}`);
                 const results = await response.json();
                 if(!response.ok) {
                     throw new Error(results.message);
                 }
-                setUserLoad(results.users);
+                setUserLoad(results);
             } catch (err) {
                 console.log(err)
             }
