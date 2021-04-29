@@ -1,8 +1,8 @@
 const db = require('./db')
-const Dislike = require("../../model/dislikeClass"); 
+const Like = require("../../model/likeClass"); 
 
 module.exports = async function (context, req) {
-    context.log('the signup function was contacted');
+    context.log('the like function was contacted');
 
     try {
         await db.startDb(); //start db connection
@@ -24,17 +24,18 @@ module.exports = async function (context, req) {
             console.log("req.body test nedeunder")
             console.log(req.body)
 
-           let payload = new Dislike(req.body.id1, req.body.id2);
+           let payload = new Like(req.body.id1, req.body.id2);
            //let payload = req.query
 
             console.log("nederunder står payload klassen")
             console.log(payload)
                        
             // fetch the userID created in the signup function from ./db
-            await db.DislikeFunction(payload)
+            const like = await db.LikeFunction(payload)
             context.res = {
-                body: {status: 'dislike inserted'}
+                body: like
             }
+
             context.log('The user was signed up and logged in')
         } catch(error){
             context.res = {

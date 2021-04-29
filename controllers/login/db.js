@@ -35,13 +35,13 @@ function Login(payload){
         FROM eksempel.[user] AS theUser
         WHERE theUser.email = @email AND theUser.password = @password
         SET IDENTITY_INSERT dating.eksempel.[user] OFF`
-        const request = new Request(sql, (err, rowcount) => {
+        const request = new Request(sql, (err, rowCount) => {
             if (err){
                 reject(err)
                 console.log(err)
-            } else if (rowcount == 0) {
+            } else if (rowCount == 0) {
                 reject({message: 'User does not exist'})
-            } else if (rowcount > 1) {
+            } else if (rowCount > 1) {
                 reject({message: '2 user with the same email or '})
             }
         });

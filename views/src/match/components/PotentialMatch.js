@@ -25,7 +25,7 @@ const PotentialMatch = props => {
         // https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault 
         event.preventDefault();
         try {
-          const response = await fetch('http://localhost:' + process.env.REACT_APP_backendPort +`/api/match/likes/${props.id}`, { //props.id is the user being liked
+          const response = await fetch('http://' + process.env.REACT_APP_backend +`/api/like`, { //props.id is the user being liked
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -33,16 +33,30 @@ const PotentialMatch = props => {
                     mode: 'cors',
                     body: JSON.stringify({
                         // take the userID from the user who is logged in
-                      likeUser: auth.userID
+                      id1: props.id,
+                      id2: auth.userID
                     })
                 });
                 // converts the post data to json
                 const responseData = await response.json();
+                console.log(responseData.length)
                 // checking if the post request was succesfully received
                 console.log(responseData)
                 // throw error if the like wasn't received by the server, perhaps cuz of formatting issues
                 if (!response.ok) {
                 throw new Error(responseData.message);
+                }
+                if (responseData.length > 1) {
+                    console.log('de er et match')
+                    try {
+                        Match(props.id, auth.userID);
+                    window.alert(`You have a match!\nYou matched with ${props.first_name} ${props.last_name} from ${props.city}!\nCheck your match's info on the match page`)
+                    } catch {
+                        console.log('match error')
+                    }
+                } else {
+                    // evt. pagination next page?
+                    console.log('like received')
                 }
                 // catch error if connection with fetch wasn't possible
         } catch (err) {}
@@ -52,14 +66,15 @@ const PotentialMatch = props => {
     const Dislike = async event => {
     event.preventDefault();
     try {
-        const response = await fetch('http://localhost:' + process.env.REACT_APP_backendPort +`/api/match/dislikes/${props.id}`, {
+        const response = await fetch('http://' + process.env.REACT_APP_backend +`/api/dislike`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 mode: 'cors',
                 body: JSON.stringify({
-                    dislikeUser: auth.userID
+                    id1: props.id,
+                    id2: auth.userID
                 })
             });
             const responseData = await response.json();
@@ -69,6 +84,28 @@ const PotentialMatch = props => {
             }
     } catch (err) {}
     };
+
+    const Match = async (userA, userB) => {
+        try {
+            const response = await fetch('http://' + process.env.REACT_APP_backend +`/api/postMatch`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    mode: 'cors',
+                    body: JSON.stringify({
+                        id1: userA,
+                        id2: userB
+                    })
+                });
+                const responseData = await response.json();
+                console.log(responseData)
+                if (!response.ok) {
+                throw new Error(responseData.message);
+                }
+        } catch (err) {}
+        };
+
     // read about props at the start of the file
       return (
     <li className='poten'>

@@ -26,11 +26,17 @@ function startDb(){
 module.exports.sqlConnection = connection;
 module.exports.startDb = startDb;
 
-function DislikeFunction(payload){
+function LikeFunction(payload){
     return new Promise((resolve, reject) => {
         // signs the user up and returns the user's id for use to log in automatically
-        const sql = `INSERT INTO dating.eksempel.disliked (user_id_reciever, user_id_sender) VALUES (@id1, @id2)`
-        const request = new Request(sql, (err) => {
+        const sql = `INSERT INTO dating.eksempel.liked (user_id_reciever, user_id_sender) VALUES (@id1, @id2)
+        SET IDENTITY_INSERT dating.eksempel.liked ON
+        SELECT *
+        FROM dating.eksempel.liked AS liking
+        WHERE (liking.user_id_sender = @id1 AND liking.user_id_reciever = @id2) OR (liking.user_id_sender = @id2 AND liking.user_id_reciever = @id1)
+        FOR JSON PATH
+        SET IDENTITY_INSERT dating.eksempel.liked OFF`
+        const request = new Request(sql, function (err) {
             if (err){
                 reject(err)
                 console.log(err)
@@ -42,16 +48,16 @@ function DislikeFunction(payload){
 
         // signup
         request.on('requestCompleted', (row) => {
-            console.log('Dislike inserted', row);
-            resolve('Dislike inserted', row)
+            console.log('Like inserted', row);
+            resolve('Like inserted', row)
         });
 
         request.on('row', (columns) => {
-            resolve(columns)
+            resolve(JSON.stringify(columns))
         });
 
         connection.execSql(request)
 
     });
 }
-module.exports.DislikeFunction = DislikeFunction;
+module.exports.LikeFunction = LikeFunction;

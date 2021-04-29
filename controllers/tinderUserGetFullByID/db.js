@@ -36,11 +36,11 @@ function select(userID){
         ON tinder.gender_interest = genderIntrst.id
     WHERE tinder.id = @id
     `;
-    const request = new Request(sql, (err, rowcount) => {
+    const request = new Request(sql, (err, rowCount) => {
         if (err) {
             reject(err)
             console.log(err)
-        } else if (rowcount == 0) {
+        } else if (rowCount == 0) {
             reject({message: 'User does not exist:'})
         }
     });
