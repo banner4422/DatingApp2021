@@ -1,5 +1,7 @@
 const db = require('./db');
-const TinderUser = require("../../model/Classes"); 
+const TinderUser = require("../../model/Classes");
+const jwt = require('jsonwebtoken')
+require('dotenv').config()
 
 module.exports = async function (context, req) {
     context.log('JavaScript HTTP trigger function processed a request.');
@@ -24,11 +26,27 @@ module.exports = async function (context, req) {
             break;
     }
 }
- 
 
     async function get(context, req) {
         try {
-            let userID = new TinderUser(req.query.id)
+            const token = req.headers.token
+            let tokenConfirm;
+            if (!token) {
+                tokenConfirm = context.res = {
+                    body: {status: 'Token does not exist, you are not authenticated'}
+                }
+            } else {
+                jwt.verify(token, process.env.JSONSECRET, (err, decoded) => {
+                    if (err) {
+                        context.res = {
+                            body: {status: 'Invalid token, you are not authenticated'}
+                        }
+                    } else {
+                        tokenConfirm = decoded.userID
+                    }
+                })
+            }
+            let userID = new TinderUser(tokenConfirm)
             let user = await db.select(userID)
             console.log(user)
             context.res = {

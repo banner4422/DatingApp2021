@@ -163,15 +163,16 @@ const Auth = () => {
                 // throw error if the login wasn't successful, perhaps because the data didn't pass server-side validation
             throw new Error(responseData.message);
             }
-            if (responseData[1].value === true) {
+            if (responseData.loginLogic[1].value === true) {
                 setLoading(false);
-                auth.adminLogin(responseData[0].value)
+                auth.adminLogin(responseData.loginLogic[0].value, responseData.token)
+                history.push(`/admin/stats`)
             } else {
             // we are now done sending data, so setLoading = false
             setLoading(false);
             // log the user in with the userID from the responseData
-            auth.login(responseData[0].value)
-            history.push(`/homepage/${responseData[0].value}`)
+            auth.login(responseData.loginLogic[0].value, responseData.token)
+            history.push(`/homepage/${responseData.loginLogic[0].value}`)
         }
             } catch (err) {
                 // catch error if it couldn't even connect to the API route for some reason
@@ -186,7 +187,8 @@ const Auth = () => {
             }
             // we need to add more validation e.g. for missing values etc.
             try {
-                const response = await fetch('http://' + process.env.REACT_APP_backend + '/api/signup', {
+                // first we check if the email exists
+                const response = await fetch('http://' + process.env.REACT_APP_backend + '/api/emailCheck', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -194,23 +196,18 @@ const Auth = () => {
                 mode: 'cors',
                 body: JSON.stringify({
                     // all the useStates from above
-                    firstName: firstName,
-                    lastName: lastName,
-                    age: age,
-                    gender: gender,
-                    genderInterest: genderInterest,
-                    interest: interest,
-                    ageInterestMin: ageMin,
-                    ageInterestMax: ageMax,
-                    city: city,
-                    description: description,
                     email: email,
-                    password: password
                 })
             });
+            console.log('response: ' + response)
             // converts the data to json
             const responseData = await response.json();
-            //console.log(responseData)
+            console.log(responseData)
+            // if the email exists, it sends the email back
+            if (responseData.length === 1) {
+                window.alert(`The email ${responseData[0].value} already exists.\nLog in with this email or use another email to sign up.`)
+                return
+            }
             if (!response.ok) {
                 // if the posted data did not pass server-side validation
             throw new Error(responseData.message);
@@ -218,16 +215,50 @@ const Auth = () => {
             // we are now done sending data, so setLoading = false
             setLoading(false);
             // log the user in after signing up, by using their userID
-            auth.login(responseData[0].value);
-            history.push(`/homepage/${responseData[0].value}`);
             } catch (err) {
-                // catch error if it couldn't even connect to the API route for some reason
+                try {
+                    const response = await fetch('http://' + process.env.REACT_APP_backend + '/api/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    mode: 'cors',
+                    body: JSON.stringify({
+                        // all the useStates from above
+                        firstName: firstName,
+                        lastName: lastName,
+                        age: age,
+                        gender: gender,
+                        genderInterest: genderInterest,
+                        interest: interest,
+                        ageInterestMin: ageMin,
+                        ageInterestMax: ageMax,
+                        city: city,
+                        description: description,
+                        email: email,
+                        password: password
+                    })
+                });
+                // converts the data to json
+                const responseData = await response.json();
+                //console.log(responseData)
+                if (!response.ok) {
+                    // if the posted data did not pass server-side validation
+                throw new Error(responseData.message);
+                }
+                // we are now done sending data, so setLoading = false
                 setLoading(false);
-                console.log(err)
+                // log the user in after signing up, by using their userID
+                auth.login(responseData.loginLogic[0].value, responseData.token);
+                history.push(`/homepage/${responseData.loginLogic[0].value}`);
+                } catch (err) {
+                    // catch error if it couldn't even connect to the API route for some reason
+                    setLoading(false);
+                    console.log(err)
+                }
             }
         }
     }
-    
 
     return <div className='auth'>
         {/* Remember to set loading because it checks instantly */}

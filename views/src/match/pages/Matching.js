@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import PotentialMatchParent from '../components/PotentialMatchParent';
+import { AuthContext } from '../../shared/context/Auth-context';
 import { useParams } from 'react-router-dom';
+import loadingGIF from '../../shared/components/loadingGIF.gif'
 
 {/*shows a potential match. Should only show one potential match at a time, 
 and show a new potential match for every time a button is clicked
@@ -17,6 +19,7 @@ const Matching = () => {
     const [userLoad, setUserLoad] = useState();
 
     const userID = useParams().userID;
+    const auth = useContext(AuthContext)
 
     useEffect (() => {
         const GET = async () => {
@@ -35,6 +38,32 @@ const Matching = () => {
         };
         GET();
     }, []);
+
+    if (loading) {
+        return (
+            <React.Fragment>
+            <div className='center'>
+                <h1>Loading</h1>
+                </div>
+                <div className='center'>
+                <img src={loadingGIF} alt="loading..." />
+                </div>
+            </React.Fragment>
+            )
+    }
+
+    if(!auth.is_admin) {
+        if(userID !== auth.userID.toString()) {
+            return (
+                <React.Fragment>
+                <div className='center'>
+                    <h1>You are not authorised to access this page.</h1>
+                    </div>
+                </React.Fragment>
+                )
+            }
+    }
+
     return (
         <React.Fragment>
     {!loading && userLoad && <PotentialMatchParent items={userLoad} />}

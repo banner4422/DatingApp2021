@@ -1,12 +1,15 @@
-import React, { useState, useCallback } from 'react';
-import { BrowserRouter,  Route, Redirect, Switch } from 'react-router-dom';
+import React, { useState, useCallback, useEffect } from 'react';
+import { BrowserRouter as Router,  Route, Redirect, Switch } from 'react-router-dom';
 
 // imports all the possible pages and headers in the application
 import Users from './user/pages/Users';
 import UsersEdit from './user/pages/UsersEdit';
+import UsersEmail from './user/pages/UsersEmail';
+import UsersPassword from './user/pages/UsersPassword';
 import UserDelete from './user/pages/UserDelete';
 import Matching from './match/pages/Matching';
 import Navigation from './shared/components/Navigation/Navigation'
+import NotFound from './shared/components/NotFound'
 import Matches from './match/pages/Matches';
 import Auth from './user/pages/Auth';
 import AdminStats from './admin/pages/adminStats';
@@ -27,43 +30,72 @@ Read more here https://reactjs.org/docs/hooks-reference.html#usecallback
 
 */
 
+let timer;
+
 const App = () => {
   // manage the state of the user is logged in or not
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [token, setToken] = useState(false);
   // manage the state of their userID
   const [userID, setUserID] = useState(false);
   // manage the state of their admin status
   const [is_admin, setIs_admin] = useState(false);
+  // token expiration state
+  const [tokenExpDate, setTokenExpDate] = useState();
 
   // useCallback() to avoid infinite loops
   // function for when the user successfully logs in
-  const login = useCallback(uid => {
-    setIsLoggedIn(true);
+  const login = useCallback((uid, token, expDate) => {
+    setToken(token);
     setUserID(uid);
-    setIs_admin(false)
+    setIs_admin(false);
+    const expData = expDate || new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 365);
+    setTokenExpDate(expData);
+    localStorage.setItem('userData', JSON.stringify({userID: uid, token: token, expires: expData.toISOString()}))
   }, []);
 
   // function for admin user logging in successfully
-  const adminLogin = useCallback(uid => {
-    setIsLoggedIn(true);
+  const adminLogin = useCallback((uid, token, expDate) => {
+    setToken(token);
     setUserID(uid);
     setIs_admin(true)
+    const expData = expDate || new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 365);
+    setTokenExpDate(expData);
+    localStorage.setItem('userData', JSON.stringify({userID: uid, token: token, expires: expData.toISOString()}))
   }, []);
 
   // function for when the user successfully logs out
   const logout = useCallback(() => {
-    setIsLoggedIn(false);
+    setToken(null);
     setUserID(null);
-    setIs_admin(null)
+    setIs_admin(null);
+    setTokenExpDate(null);
+    localStorage.removeItem('userData')
   }, []);
+
+  useEffect(() => {
+    if (token && tokenExpDate) {
+      const remain = tokenExpDate.getTime() - new Date().getTime();
+      timer = setTimeout(logout, remain)
+    } else {
+      clearTimeout(timer);
+    }
+  }, [token, logout, tokenExpDate]);
+
+  useEffect(() => {
+    const storageData = JSON.parse(localStorage.getItem('userData'));
+    if (storageData && storageData.token && new Date(storageData.expires) > new Date()) {
+      login(storageData.userID, storageData.token, new Date(storageData.expires));
+    }
+  }, [login]);
 
   // routes variable, to be used below for 
   // if the user is logged in or not and for Switch routing (further explanation below)
   let routes;
   // if the logged in user is an admin
-  if (isLoggedIn && is_admin === true) {
+  if (token && is_admin === true) {
     routes = (
       <React.Fragment>
+        <Switch>
         {/*Statistics page*/}
         <Route path='/admin/stats' exact>
           <AdminStats />
@@ -75,11 +107,19 @@ const App = () => {
         <Route path='/user/edit/:userID' exact>
           <UsersEdit />
         </Route>
-        <Redirect to='/admin/stats' />
+        <Route path='/user/edit/email/:userID' exact>
+          <UsersEmail />
+        </Route>
+
+        <Route path='/user/edit/password/:userID' exact>
+          <UsersPassword />
+        </Route>
+        <Route component={NotFound} />
+        </Switch>
       </React.Fragment>
     );
   // if the user is logged in
-  } else if (isLoggedIn) {
+  } else if (token) {
     // if the user is logged in, then the routes are the following
     // react automatically adjusts to elements written with :, so it knows it's the userID for the path
     routes = (
@@ -87,6 +127,7 @@ const App = () => {
       // it would not render without wrapping them into a <React.Fragment>
       // read more here https://reactjs.org/docs/fragments.html
       <React.Fragment>
+        <Switch>
         {/*
         Route renders the wrapped in element (which in this case is a page) at a specificly defined route
         */}
@@ -104,14 +145,13 @@ const App = () => {
         <Route path='/user/delete/:userID' exact>
           <UserDelete />
         </Route>
-        {/*user page routes - commented out
         <Route path='/user/edit/email/:userID' exact>
           <UsersEmail />
         </Route>
+
         <Route path='/user/edit/password/:userID' exact>
           <UsersPassword />
         </Route>
-        */}
 
         {/*user matches route*/}
         <Route path='/matches/:userID' exact>
@@ -131,21 +171,22 @@ const App = () => {
         it redirects them to the frontpage
         
         */}
-        
-        <Redirect to='/' />
+        <Route component={NotFound} />
             
-
+        </Switch>
       </React.Fragment>
     );
   } else {
     // if the user isn't logged in
     routes = (
       <React.Fragment>
+        <Switch>
         {/*Auth login*/}
         <Route path='/auth' exact>
           <Auth />
         </Route>
-        <Redirect to='/auth' />
+        <Route component={NotFound} />
+        </Switch>
       </React.Fragment>
     );
   }
@@ -154,7 +195,8 @@ const App = () => {
   */}
   return (
   <AuthContext.Provider 
-  value={{ isLoggedIn: isLoggedIn, 
+  value={{ isLoggedIn: !!token, 
+    token: token,
     userID: userID,
     login: login, 
     logout: logout,
@@ -167,20 +209,20 @@ const App = () => {
     to keep your UI in sync with the URL.
     https://reactrouter.com/web/api/BrowserRouter
     */}
-    <BrowserRouter>
+    <Router>
       {/* The navigation header for every page, with logic in the object for if
       the user is logged in or not */}
       <Navigation />
       <main>
       {/*switch routing*/}
-      <Switch>
+
         {/* we have done our switching logic in the routes element, 
         that changes depending on if a user is logged in or not
         Read more about Switch here https://reactrouter.com/web/api/Switch */}
         {routes}
-      </Switch>
+
       </main>
-    </BrowserRouter>
+    </Router>
   </AuthContext.Provider>
   );
 };

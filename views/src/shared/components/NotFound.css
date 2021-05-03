@@ -1,0 +1,16 @@
+.auth-header {
+    color: white;
+    text-align: center;
+  }
+  
+.adminStats {
+    color: white;
+    width: 90%;
+    max-width: 25rem;
+    margin: 7rem auto;
+    text-align: center;
+}
+  
+.adminStats form {
+    margin-bottom: 1rem;
+}

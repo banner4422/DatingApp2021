@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import MatchParent from '../components/MatchParent';
 import { useParams } from 'react-router-dom';
+import { AuthContext } from '../../shared/context/Auth-context';
 import loadingGIF from '../../shared/components/loadingGIF.gif'
 
 {/*
@@ -39,6 +40,7 @@ const Matches = () => {
     // useParams()returns an object of key/value pairs of URL parameters.
     // so this object takes the userID of the logged in user, and uses it to fetch their matches
     const userID = useParams().userID;
+    const auth = useContext(AuthContext)
 
     // fetching a user's matches 
     useEffect (() => {
@@ -80,6 +82,18 @@ const Matches = () => {
             </div>
           </React.Fragment>
           )
+    }
+
+    if(!auth.is_admin) {
+        if(userID !== auth.userID.toString()) {
+            return (
+                <React.Fragment>
+                <div className='center'>
+                    <h1>You are not authorised to access this page.</h1>
+                    </div>
+                </React.Fragment>
+                )
+            }
     }
 
     if (!userLoad) {

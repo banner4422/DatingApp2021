@@ -1,10 +1,8 @@
 const db = require('./db')
-const TinderUser = require("../../model/Classes");
-const jwt = require('jsonwebtoken')
-require('dotenv').config()
+const TinderUser = require("../../model/Classes"); 
 
 module.exports = async function (context, req) {
-    context.log('the signup function was contacted');
+    context.log('the email check was contacted');
 
     try {
         await db.startDb(); //start db connection
@@ -23,30 +21,15 @@ module.exports = async function (context, req) {
     }
     async function post(context, req){
         try{
-            console.log("req.body test nedeunder")
-            console.log(req.body)
-            console.log(req.body.email)
-            console.log(req.body.firstName)
+            
 
            // let payload = new TinderUser(req.body.email, req.body.password, req.body.firstName, req.body.lastName, req.body.city, req.body.age, req.body.interest, req.body.gender, req.body.description, req.body.genderInterest, req.body.ageInterestMin, req.body.ageInterestMax);
-           let payload = new TinderUser(0, req.body.email, req.body.password, req.body.firstName, req.body.lastName, req.body.city, req.body.age, req.body.interest, req.body.gender, req.body.description, req.body.genderInterest, req.body.ageInterestMin, req.body.ageInterestMax);
-
-            console.log("nederunder står payload klassen")
-            console.log(payload)
-            console.log("navnet på payload er " + payload.name + " eller med underscore; " + payload._name)
+           let payload = new TinderUser(0, req.body.email);
            
             // fetch the userID created in the signup function from ./db
-            let signupID = await db.Signup(payload)
-
-            let token;
-            try {
-                token = jwt.sign({userID: signupID[0].value, }, process.env.JSONSECRET, {expiresIn: '365 days'})
-            } catch (err) {
-                console.log(err)
-            }
-
+            let emailCheck = await db.EmailCheck(payload)
             context.res = {
-                body: {loginLogic: signupID, token: token}
+                body: emailCheck
             }
             context.log('The user was signed up and logged in')
         } catch(error){

@@ -26,26 +26,26 @@ function startDb(){
 module.exports.sqlConnection = connection;
 module.exports.startDb = startDb;
 
-function Login(payload){
+function EmailCheck(payload){
     return new Promise((resolve, reject) => {
         // signs the user up and returns the user's id for use to log in automatically
-        const sql = `
-        SET IDENTITY_INSERT dating.eksempel.[user] ON
-        SELECT theUser.id, theUser.is_admin, theUser.password
-        FROM eksempel.[user] AS theUser
-        WHERE theUser.email = @email
-        SET IDENTITY_INSERT dating.eksempel.[user] OFF`
-        const request = new Request(sql, (err, rowCount) => {
+        const sql = `SELECT [user].email
+        FROM dating.eksempel.[user]
+        WHERE email = @email`
+        const request = new Request(sql, (err, rowcount) => {
             if (err){
                 reject(err)
                 console.log(err)
-            } else if (rowCount == 0) {
-                reject({message: 'User does not exist'})
-            } else if (rowCount > 1) {
-                reject({message: '2 user with the same email or '})
             }
         });
-        request.addParameter('email', TYPES.VarChar, payload.email)
+
+        request.addParameter('email', TYPES.VarChar, payload._email)
+
+        // signup
+        request.on('requestCompleted', (row) => {
+            console.log('User inserted', row);
+            resolve('user inserted', row)
+        });
 
         // returns the userID
         request.on('row', (columns) => {
@@ -56,4 +56,4 @@ function Login(payload){
 
     });
 }
-module.exports.Login = Login;
+module.exports.EmailCheck = EmailCheck;
