@@ -26,29 +26,26 @@ function startDb(){
 module.exports.sqlConnection = connection;
 module.exports.startDb = startDb;
 
-function Login(payload){
+function DislikeFunction(payload){
     return new Promise((resolve, reject) => {
         // signs the user up and returns the user's id for use to log in automatically
-        const sql = `
-        SET IDENTITY_INSERT dating.eksempel.[user] ON
-        SELECT theUser.id, theUser.is_admin
-        FROM eksempel.[user] AS theUser
-        WHERE theUser.email = @email AND theUser.password = @password
-        SET IDENTITY_INSERT dating.eksempel.[user] OFF`
-        const request = new Request(sql, (err, rowCount) => {
+        const sql = `INSERT INTO dating.eksempel.disliked (user_id_reciever, user_id_sender) VALUES (@id1, @id2)`
+        const request = new Request(sql, (err) => {
             if (err){
                 reject(err)
                 console.log(err)
-            } else if (rowCount == 0) {
-                reject({message: 'User does not exist'})
-            } else if (rowCount > 1) {
-                reject({message: '2 user with the same email or '})
             }
         });
-        request.addParameter('email', TYPES.VarChar, payload.email)
-        request.addParameter('password', TYPES.VarChar, payload.password)
 
-        // returns the userID
+        request.addParameter('id1', TYPES.Int, payload._id1)
+        request.addParameter('id2', TYPES.Int, payload._id2)
+
+        // signup
+        request.on('requestCompleted', (row) => {
+            console.log('Dislike inserted', row);
+            resolve('Dislike inserted', row)
+        });
+
         request.on('row', (columns) => {
             resolve(columns)
         });
@@ -57,4 +54,4 @@ function Login(payload){
 
     });
 }
-module.exports.Login = Login;
+module.exports.DislikeFunction = DislikeFunction;
