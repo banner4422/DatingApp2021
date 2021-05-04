@@ -31,7 +31,12 @@ const UsersEmail = () => {
         const GET = async () => {
             setLoading(true);
             try {
-                const response = await fetch('http://' + process.env.REACT_APP_backend +`/api/TinderUserGetFullByID?id=${userID}`);
+                const response = await fetch('http://' + process.env.REACT_APP_backend +`/api/TinderUserGetFullByID?id=${userID}`, {
+                    method: 'GET',
+                    headers: {
+                        'token': auth.token
+                    }
+                });
                 const results = await response.json();
                 if(!response.ok) {
                     throw new Error(results.message);

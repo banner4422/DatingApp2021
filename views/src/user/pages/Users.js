@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext} from 'react';
-//import UserParent from '../components/UserParent';
-import { useParams, Link, Redirect } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { AuthContext } from '../../shared/context/Auth-context';
 import './Users.css'
 import loadingGIF from '../../shared/components/loadingGIF.gif'
@@ -26,7 +25,6 @@ const Users = () => {
   const [ageMax, setAgeMax] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
 
   const userID = useParams().userID;
   const auth = useContext(AuthContext);

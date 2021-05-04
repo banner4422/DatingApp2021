@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { BrowserRouter as Router,  Route, Redirect, Switch } from 'react-router-dom';
+import { BrowserRouter as Router,  Route, Switch } from 'react-router-dom';
 
 // imports all the possible pages and headers in the application
 import Users from './user/pages/Users';
