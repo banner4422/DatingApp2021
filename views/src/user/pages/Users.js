@@ -1,6 +1,6 @@
-import React, { useState, useEffect} from 'react';
-//import UserParent from '../components/UserParent';
+import React, { useState, useEffect, useContext} from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { AuthContext } from '../../shared/context/Auth-context';
 import './Users.css'
 import loadingGIF from '../../shared/components/loadingGIF.gif'
 
@@ -26,14 +26,19 @@ const Users = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-
   const userID = useParams().userID;
+  const auth = useContext(AuthContext);
 
     useEffect (() => {
         const GET = async () => {
             setLoading(true);
             try {
-                const response = await fetch('http://' + process.env.REACT_APP_backend +`/api/TinderUserGetFullByID?id=${userID}`);
+                const response = await fetch('http://' + process.env.REACT_APP_backend +`/api/TinderUserGetFullByID?id=${userID}`, {
+                    method: 'GET',
+                    headers: {
+                        'token': auth.token
+                    }
+                });
                 const results = await response.json();
                 if(!response.ok) {
                     throw new Error(results.message);
@@ -70,6 +75,18 @@ const Users = () => {
             </React.Fragment>
             )
       }
+
+    if(!auth.is_admin) {
+    if(userID !== auth.userID.toString()) {
+        return (
+            <React.Fragment>
+            <div className='center'>
+                <h1>You are not authorised to access this page.</h1>
+                </div>
+            </React.Fragment>
+            )
+        }
+    }
 
   return <div className='Users'>
       {loading}

@@ -1,5 +1,7 @@
 const db = require('./db')
-const TinderUser = require("../../model/Classes"); 
+const TinderUser = require("../../model/Classes");
+const jwt = require('jsonwebtoken')
+require('dotenv').config()
 
 module.exports = async function (context, req) {
     context.log('the signup function was contacted');
@@ -35,8 +37,16 @@ module.exports = async function (context, req) {
            
             // fetch the userID created in the signup function from ./db
             let signupID = await db.Signup(payload)
+
+            let token;
+            try {
+                token = jwt.sign({userID: signupID[0].value, }, process.env.JSONSECRET, {expiresIn: '365 days'})
+            } catch (err) {
+                console.log(err)
+            }
+
             context.res = {
-                body: signupID
+                body: {loginLogic: signupID, token: token}
             }
             context.log('The user was signed up and logged in')
         } catch(error){

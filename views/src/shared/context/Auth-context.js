@@ -12,6 +12,7 @@ Read more about the createContext method here https://reactjs.org/docs/context.h
 export const AuthContext = createContext({ 
     isLoggedIn: false,
     userID: null,
+    token: null,
     is_admin: false,
     login: () => {}, 
     logout: () => {},

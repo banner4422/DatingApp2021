@@ -1,8 +1,8 @@
 const db = require('./db')
-const Like = require("../../model/likeClass"); 
+const TinderUser = require("../../model/Classes"); 
 
 module.exports = async function (context, req) {
-    context.log('the like function was contacted');
+    context.log('the email check was contacted');
 
     try {
         await db.startDb(); //start db connection
@@ -21,21 +21,16 @@ module.exports = async function (context, req) {
     }
     async function post(context, req){
         try{
-            console.log("req.body test nedeunder")
-            console.log(req.body)
+            
 
-           let payload = new Like(req.body.id1, req.body.id2);
-           //let payload = req.query
-
-            console.log("nederunder står payload klassen")
-            console.log(payload)
-                       
+           // let payload = new TinderUser(req.body.email, req.body.password, req.body.firstName, req.body.lastName, req.body.city, req.body.age, req.body.interest, req.body.gender, req.body.description, req.body.genderInterest, req.body.ageInterestMin, req.body.ageInterestMax);
+           let payload = new TinderUser(0, req.body.email);
+           
             // fetch the userID created in the signup function from ./db
-            const like = await db.LikeFunction(payload)
+            let emailCheck = await db.EmailCheck(payload)
             context.res = {
-                body: like
+                body: emailCheck
             }
-
             context.log('The user was signed up and logged in')
         } catch(error){
             context.res = {

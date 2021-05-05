@@ -26,38 +26,34 @@ function startDb(){
 module.exports.sqlConnection = connection;
 module.exports.startDb = startDb;
 
-function LikeFunction(payload){
+function EmailCheck(payload){
     return new Promise((resolve, reject) => {
         // signs the user up and returns the user's id for use to log in automatically
-        const sql = `INSERT INTO dating.eksempel.liked (user_id_reciever, user_id_sender) VALUES (@id1, @id2)
-        SET IDENTITY_INSERT dating.eksempel.liked ON
-        SELECT *
-        FROM dating.eksempel.liked AS liking
-        WHERE (liking.user_id_sender = @id1 AND liking.user_id_reciever = @id2) OR (liking.user_id_sender = @id2 AND liking.user_id_reciever = @id1)
-        FOR JSON PATH
-        SET IDENTITY_INSERT dating.eksempel.liked OFF`
-        const request = new Request(sql, function (err) {
+        const sql = `SELECT [user].email
+        FROM dating.eksempel.[user]
+        WHERE email = @email`
+        const request = new Request(sql, (err, rowcount) => {
             if (err){
                 reject(err)
                 console.log(err)
             }
         });
 
-        request.addParameter('id1', TYPES.Int, payload._id1)
-        request.addParameter('id2', TYPES.Int, payload._id2)
+        request.addParameter('email', TYPES.VarChar, payload._email)
 
         // signup
         request.on('requestCompleted', (row) => {
-            console.log('Like inserted', row);
-            resolve('Like inserted', row)
+            console.log('User inserted', row);
+            resolve('user inserted', row)
         });
 
+        // returns the userID
         request.on('row', (columns) => {
-            resolve(JSON.stringify(columns))
+            resolve(columns)
         });
 
         connection.execSql(request)
 
     });
 }
-module.exports.LikeFunction = LikeFunction;
+module.exports.EmailCheck = EmailCheck;

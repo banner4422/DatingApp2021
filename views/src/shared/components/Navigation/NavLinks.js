@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import { AuthContext } from '../../context/Auth-context'
 import './NavLinks.css';
 
@@ -19,6 +19,13 @@ const NavLinks = props => {
     // useContext provides a way to pass data through the component tree without having to pass props down manually at every level.
     // read more here https://reactjs.org/docs/hooks-reference.html#usecontext 
     const auth = useContext(AuthContext);
+    const history = useHistory();
+
+    const LOGOUT = async () => {
+        auth.logout();
+        history.push(`/`)
+        // when token is implement we'll use window.location.reload() instead
+    };
 
     return <ul className='nav-links'>
         {/* ! means if the value is not true */}
@@ -52,13 +59,13 @@ const NavLinks = props => {
         {/* If the user is not logged in */}
         {!auth.isLoggedIn && !auth.is_admin && (
         <li>
-            <NavLink to='/auth' exact>Log in</NavLink>
+            <NavLink to='/' exact>Log in</NavLink>
         </li>
         )}
         {/* universal logout */}
         {auth.isLoggedIn && 
         <li>
-            <button onClick={auth.logout}>
+            <button onClick={LOGOUT}>
                 Log out
             </button>
         </li>}

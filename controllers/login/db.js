@@ -31,9 +31,9 @@ function Login(payload){
         // signs the user up and returns the user's id for use to log in automatically
         const sql = `
         SET IDENTITY_INSERT dating.eksempel.[user] ON
-        SELECT theUser.id, theUser.is_admin
+        SELECT theUser.id, theUser.is_admin, theUser.password
         FROM eksempel.[user] AS theUser
-        WHERE theUser.email = @email AND theUser.password = @password
+        WHERE theUser.email = @email
         SET IDENTITY_INSERT dating.eksempel.[user] OFF`
         const request = new Request(sql, (err, rowCount) => {
             if (err){
@@ -46,7 +46,6 @@ function Login(payload){
             }
         });
         request.addParameter('email', TYPES.VarChar, payload.email)
-        request.addParameter('password', TYPES.VarChar, payload.password)
 
         // returns the userID
         request.on('row', (columns) => {

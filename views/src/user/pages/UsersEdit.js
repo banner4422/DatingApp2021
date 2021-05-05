@@ -24,8 +24,6 @@ const UsersEdit = () => {
     const [description, setDescription] = useState('');
     const [ageMin, setAgeMin] = useState('');
     const [ageMax, setAgeMax] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
 
     // default values for preview to be used in defaultValues
     const defaultValues = {
@@ -36,8 +34,6 @@ const UsersEdit = () => {
         description: description,
         ageMin: ageMin,
         ageMax: ageMax,
-        email: email,
-        password: password
     }
 
     // options being fetched
@@ -118,7 +114,12 @@ const UsersEdit = () => {
         const GET = async () => {
             setLoading(true);
             try {
-                const response = await fetch('http://' + process.env.REACT_APP_backend +`/api/TinderUserGetFullByID?id=${userID}`);
+                const response = await fetch('http://' + process.env.REACT_APP_backend +`/api/TinderUserGetFullByID?id=${userID}`, {
+                    method: 'GET',
+                    headers: {
+                        'token': auth.token
+                    }
+                });
                 const results = await response.json();
                 if(!response.ok) {
                     throw new Error(results.message);
@@ -133,8 +134,6 @@ const UsersEdit = () => {
                 setDescription(results[9].value);
                 setAgeMin(results[12].value);
                 setAgeMax(results[13].value);
-                setEmail(results[14].value);
-                setPassword(results[15].value);
 
                 // for use in dropdowns
                 setSelectGenderBox(results[7].value)
@@ -186,8 +185,6 @@ const UsersEdit = () => {
                     ageInterestMax: data.ageMax,
                     city: data.city,
                     description: data.description,
-                    email: data.email,
-                    password: data.password,
                     })
                 });
                 const responseData = await response.json();
@@ -215,6 +212,17 @@ const UsersEdit = () => {
               </div>
             </React.Fragment>
             )
+    }
+    if(!auth.is_admin) {
+        if(userID !== auth.userID.toString()) {
+            return (
+                <React.Fragment>
+                <div className='center'>
+                    <h1>You are not authorised to access this page.</h1>
+                    </div>
+                </React.Fragment>
+                )
+            }
     }
 
     // if the user can't be loaded for some reason
@@ -295,17 +303,7 @@ const UsersEdit = () => {
             <div>
             <label htmlFor='description'>Description:</label><br></br>
             <input type='text' id='description' name='description' defaultValue={defaultValues.description} {...register('description')}></input><br></br>
-            </div>
-
-            <div>
-            <label htmlFor='email'>Email:</label><br></br>
-            <input type='email' id='email' name='email' defaultValue={defaultValues.email} {...register('email')}></input><br></br>
-            </div>
-
-            <div>
-            <label htmlFor='password'>Password:</label><br></br>
-            <input type='password' id='password' name='password' defaultValue={defaultValues.password} {...register('password')}></input><br></br><br></br>
-            </div>
+            </div><br></br>
 
             <input type="submit" value='Update info'></input>
 
@@ -315,6 +313,20 @@ const UsersEdit = () => {
             {/* A button that links back to the user info*/}
             <Link to={auth.is_admin ? `/admin/users` : `/user/${auth.userID}`}>
               <button>Go back with no changes</button>
+            </Link>
+        </div>
+        <br></br>
+        <div>
+            {/* A button that links back to the user info*/}
+            <Link to={`/user/edit/email/${userID}`}>
+              <button>Change email</button>
+            </Link>
+        </div>
+        <br></br>
+        <div>
+            {/* A button that links back to the user info*/}
+            <Link to={`/user/edit/password/${userID}`}>
+              <button>Change password</button>
             </Link>
         </div>
         <br></br>

@@ -39,12 +39,6 @@ function update(payload){
             join dating.eksempel.[user] as US
             ON TU.id = US.id
         WHERE TU.id = @yourID
-
-        UPDATE US
-            set email = @email,
-                password = @password
-        from dating.eksempel.[user] as US
-        WHERE id = @yourID
         `;
 
         const request = new Request(sql, (err) => {
@@ -55,8 +49,6 @@ function update(payload){
         });
         
         request.addParameter('yourID', TYPES.Int, payload._id)
-        request.addParameter('email', TYPES.VarChar, payload._email)
-        request.addParameter('password', TYPES.VarChar, payload._password)
         request.addParameter('first_name', TYPES.Text, payload._firstName)
         request.addParameter('last_name', TYPES.Text, payload._lastName)
         request.addParameter('city', TYPES.Text, payload._city)

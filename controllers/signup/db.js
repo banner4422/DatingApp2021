@@ -1,4 +1,6 @@
-const {Connection, Request, TYPES} = require('tedious')
+const {Connection, Request, TYPES} = require('tedious');
+const bcrypt = require('bcrypt');
+const saltRounds = 10
 
 // our server config file
 const config = require('../config.json')
@@ -29,6 +31,12 @@ module.exports.startDb = startDb;
 function Signup(payload){
     return new Promise((resolve, reject) => {
         // signs the user up and returns the user's id for use to log in automatically
+        bcrypt.hash(payload._password, saltRounds, (err, hash) => {
+            if (err) {
+                console.log(err)
+            }
+
+        
         const sql = `INSERT INTO dating.eksempel.[user] (email, password, is_admin) VALUES (@email, @password, @isAdmin)
         SET IDENTITY_INSERT dating.eksempel.tinder_user ON
         INSERT INTO dating.eksempel.tinder_user (id, first_name, last_name, city, age, interest, gender, description, gender_interest, age_interest_min, age_interest_max) VALUES (scope_identity(), @first_name, @last_name, @city, @age, @interest, @gender, @description, @gender_interest, @age_interest_min, @age_interest_max)
@@ -38,7 +46,7 @@ function Signup(payload){
         FROM eksempel.[user] AS theUser
         WHERE theUser.email = @email AND theUser.password = @password
         SET IDENTITY_INSERT dating.eksempel.[user] OFF`
-        const request = new Request(sql, (err, rowcount) => {
+        const request = new Request(sql, (err, rowCount) => {
             if (err){
                 reject(err)
                 console.log(err)
@@ -46,7 +54,7 @@ function Signup(payload){
         });
 
         request.addParameter('email', TYPES.VarChar, payload._email)
-        request.addParameter('password', TYPES.VarChar, payload._password)
+        request.addParameter('password', TYPES.VarChar, hash)
         request.addParameter('first_name', TYPES.Text, payload._firstName)
         request.addParameter('last_name', TYPES.Text, payload._lastName)
         request.addParameter('city', TYPES.Text, payload._city)
@@ -71,6 +79,7 @@ function Signup(payload){
         });
 
         connection.execSql(request)
+    })
 
     });
 }

@@ -30,7 +30,7 @@ const UserDelete = () => {
             }
             setLoading(false);
             auth.logout();
-            history.push(`/auth`)
+            history.push(`/`)
             // when token is implement we'll use window.location.reload() instead
         };
     
@@ -46,6 +46,17 @@ const UserDelete = () => {
             </React.Fragment>
             )
         }
+    if(!auth.is_admin) {
+        if(userID !== auth.userID.toString()) {
+            return (
+                <React.Fragment>
+                <div className='center'>
+                    <h1>You are not authorised to access this page.</h1>
+                    </div>
+                </React.Fragment>
+                )
+            }
+    }
     return <div div className='Users'>
         <h1>Deleting your account</h1>
         <h3>Are you sure that you want to delete your account?</h3>
