@@ -29,7 +29,11 @@ module.exports.startDb = startDb;
 function DislikeFunction(payload){
     return new Promise((resolve, reject) => {
         // signs the user up and returns the user's id for use to log in automatically
-        const sql = `INSERT INTO dating.eksempel.disliked (user_id_reciever, user_id_sender) VALUES (@id1, @id2)`
+        const sql = `INSERT INTO dating.eksempel.disliked (user_id_reciever, user_id_sender)
+        SELECT @id1, @id2
+        WHERE NOT EXISTS(SELECT TOP 1 * FROM dating.eksempel.disliked
+            WHERE user_id_reciever = @id1 AND user_id_sender = @id2)
+        `
         const request = new Request(sql, (err) => {
             if (err){
                 reject(err)

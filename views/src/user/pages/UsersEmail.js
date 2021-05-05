@@ -78,7 +78,7 @@ const UsersEmail = () => {
                     history.push(`/admin/users`)
                 } else {
                   auth.logout();
-                  history.push(`/auth`)
+                  history.push(`/`)
             }
         } catch (err) {}
       };

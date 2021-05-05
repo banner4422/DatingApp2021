@@ -20,7 +20,7 @@ const Navigation = props => {
     if (!auth.userID) {
         return <Header>
         <h1 className='navigation-title'>
-            <Link to='/auth'>Dating App (MVP)</Link>
+            <Link to='/'>Dating App (MVP)</Link>
         </h1>
         <nav className='navigation-header-nav'>
             <NavLinks />

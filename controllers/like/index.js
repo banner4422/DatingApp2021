@@ -11,11 +11,14 @@ const LikeFunction = (context, id1, id2) => {
     const connection = new Connection(config);
 
     // create command to be executed
-    const request = new Request(`INSERT INTO dating.eksempel.liked (user_id_reciever, user_id_sender) VALUES (${id1}, ${id2})
+    const request = new Request(`INSERT INTO dating.eksempel.liked (user_id_reciever, user_id_sender)
+    SELECT ${id1}, ${id2}
+    WHERE NOT EXISTS(SELECT TOP 1 * FROM dating.eksempel.liked
+        WHERE user_id_reciever = ${id1} AND user_id_sender = ${id2})
     SET IDENTITY_INSERT dating.eksempel.liked ON
     SELECT *
     FROM dating.eksempel.liked AS liking
-    WHERE (liking.user_id_sender = ${id1} AND liking.user_id_reciever = ${id2}) OR (liking.user_id_sender = ${id2} AND liking.user_id_reciever = ${id1})
+    WHERE (liking.user_id_sender = 8 AND liking.user_id_reciever = 5) OR (liking.user_id_sender = 5 AND liking.user_id_reciever = 8)
     FOR JSON PATH
     SET IDENTITY_INSERT dating.eksempel.liked OFF
     `, function(err){

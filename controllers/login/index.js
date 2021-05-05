@@ -28,7 +28,7 @@ module.exports = async function (context, req) {
             let loginCheck = await db.Login(payload)
             let token;
             try {
-                token = jwt.sign({userID: loginCheck[0].value, }, process.env.JSONSECRET, {expiresIn: '365 days'})
+                token = jwt.sign({userID: loginCheck[0].value, is_admin: loginCheck[1].value }, process.env.JSONSECRET, {expiresIn: '365 days'})
             } catch (err) {
                 console.log(err)
             }

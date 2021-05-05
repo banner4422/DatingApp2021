@@ -23,7 +23,7 @@ const NavLinks = props => {
 
     const LOGOUT = async () => {
         auth.logout();
-        history.push(`/auth`)
+        history.push(`/`)
         // when token is implement we'll use window.location.reload() instead
     };
 
@@ -59,7 +59,7 @@ const NavLinks = props => {
         {/* If the user is not logged in */}
         {!auth.isLoggedIn && !auth.is_admin && (
         <li>
-            <NavLink to='/auth' exact>Log in</NavLink>
+            <NavLink to='/' exact>Log in</NavLink>
         </li>
         )}
         {/* universal logout */}

@@ -31,6 +31,7 @@ module.exports = async function (context, req) {
         try {
             const token = req.headers.token
             let tokenConfirm;
+            let is_admin;
             if (!token) {
                 tokenConfirm = context.res = {
                     body: {status: 'Token does not exist, you are not authenticated'}
@@ -43,10 +44,16 @@ module.exports = async function (context, req) {
                         }
                     } else {
                         tokenConfirm = decoded.userID
+                        is_admin = decoded.is_admin
                     }
                 })
             }
-            let userID = new TinderUser(tokenConfirm)
+            let userID;
+            if (is_admin) {
+                userID = new TinderUser(req.query.id)
+            } else {
+                userID = new TinderUser(tokenConfirm)
+            }
             let user = await db.select(userID)
             console.log(user)
             context.res = {

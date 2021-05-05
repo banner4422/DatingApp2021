@@ -182,7 +182,7 @@ const App = () => {
       <React.Fragment>
         <Switch>
         {/*Auth login*/}
-        <Route path='/auth' exact>
+        <Route path='/' exact>
           <Auth />
         </Route>
         <Route component={NotFound} />
