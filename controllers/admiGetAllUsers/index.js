@@ -4,7 +4,7 @@ var Request = require('tedious').Request
 // the config file is not included because of sensitive data
 const config = require('../config.json')
 
-const executeSQL = (context,userId) => {
+const executeSQL = (context) => {
     var result = '';
 
     // create connection object
@@ -44,7 +44,7 @@ GROUP BY theUser.id, tinder.first_name, tinder.last_name, tinder.city, tinder.ag
         if (err){
             context.log.error(err);
             context.res.status = 500;
-            context.res.body = 'Error executing T-SQL command';
+            context.res.body = 'Error executing T-SQL command for /api/admiGetAllUsers';
         } else {
             context.res = {
                 body: result
@@ -76,7 +76,6 @@ GROUP BY theUser.id, tinder.first_name, tinder.last_name, tinder.city, tinder.ag
     connection.connect();
 }
 module.exports = function (context, req) {
-    context.log('Data containing all users has been sent.');
-    const userId = (req.query.userId || (req.body && req.body.userId));
-    executeSQL(context, userId)
+    executeSQL(context)
+    context.log('admiGetAllUsers were executed successfully.');
 }

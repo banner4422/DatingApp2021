@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
 module.exports = async function (context, req) {
-    context.log('JavaScript HTTP trigger function processed a request.');
+    context.log('the tinderUserGetFullyByID function was contacted');
 
     try { 
         await db.startDb(); //start db connection
@@ -16,15 +16,13 @@ module.exports = async function (context, req) {
         case 'GET':
             await get(context, req);
             break;
-        case 'POST':
-            await post(context, req);
-            break;
         default: 
             context.res = {
-                body: "please get or post"
+                body: "Please GET"
             };
             break;
     }
+    context.log(`Function for tinderUserGetFullyByID has been executed successfully. UserID: ${req.query.id} got full info.`);
 }
 
     async function get(context, req) {
@@ -55,7 +53,6 @@ module.exports = async function (context, req) {
                 userID = new TinderUser(tokenConfirm)
             }
             let user = await db.select(userID)
-            console.log(user)
             context.res = {
                 body: user
             }

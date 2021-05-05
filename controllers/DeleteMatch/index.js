@@ -2,7 +2,7 @@ const db = require('./db');
 const Match = require("../../model/MatchClass"); 
 
 module.exports = async function (context, req) {
-    context.log('JavaScript HTTP trigger function processed a request.');
+    context.log('JavaScript HTTP trigger function for DeleteMatch processed a request.');
 
     try { 
         await db.startDb(); //start db connection
@@ -16,10 +16,11 @@ module.exports = async function (context, req) {
             break;
         default: 
             context.res = {
-                body: "please get, post or delete"
+                body: "Please DELETE"
             };
             break;
     }
+    context.log('Function for DeleteMatch has been executed successfully');
 }
 
     // DELETE
@@ -29,7 +30,7 @@ module.exports = async function (context, req) {
             console.log(payload)
             await db.removeMatch(payload)
             context.res = {
-                body: {status: "Delete Succes"}
+                body: { status: `Delete match for userID: ${payload._id1} with userID: ${payload._id1} was successful` }
             }
         } catch(error) {
             context.res = {

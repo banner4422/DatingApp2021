@@ -17,7 +17,7 @@ const executeSQL = (context) => {
         if (err){
             context.log.error(err);
             context.res.status = 500;
-            context.res.body = 'Error executing T-SQL command';
+            context.res.body = 'Error executing T-SQL command for /api/getInterest';
         } else {
             context.res = {
                 body: result
@@ -49,7 +49,6 @@ const executeSQL = (context) => {
     connection.connect();
 }
 module.exports = function (context, req) {
-    context.log('interest data has been sent.');
-
     executeSQL(context)
+    context.log('interest data has been sent.');
 }

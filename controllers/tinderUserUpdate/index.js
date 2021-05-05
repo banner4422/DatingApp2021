@@ -2,7 +2,7 @@ const db = require('./db.js');
 const TinderUser = require("../../model/Classes"); 
 
 module.exports = async function (context, req) {
-    context.log('JavaScript HTTP trigger function processed a request.');
+    context.log('the tinderUserUpdate function was contacted');
 
     try { 
         await db.startDb(); //start db connection
@@ -11,37 +11,26 @@ module.exports = async function (context, req) {
     } 
     // her håndteres der om vi enten getter eller poster på samme endpoint pga sikkerhedsmæssige årsager.
     switch (req.method) {
-        case 'GET':
-            await get(context, req);
-            break;
-        case 'POST':
-            await post(context, req);
-            break;
         case 'PATCH':
             await patch(context, req);
             break;
         default: 
             context.res = {
-                body: "please get, post or patch"
+                body: "Please PATCH"
             };
             break;
     }
+    context.log(`Function for tinderUserUpdate has been executed successfully. UserID: ${req.query.userID} got their info updated.`);
 }
 
 // Patch 
 async function patch(context, req) {
     try{
-        //  let payload = new TinderUser(req.body.email, req.body.password, req.body.firstName, req.body.lastName, req.body.city, req.body.age, req.body.interest, req.body.gender, req.body.description, req.body.genderInterest, req.body.ageInterestMin, req.body.ageInterestMax);
-        console.log(req.body)
-        console.log("nedeunder står req.body.ID")
-        console.log(req.body.userID)
         let payload = new TinderUser(req.body.userID, req.body.email, req.body.password, req.body.firstName, req.body.lastName, req.body.city, req.body.age, req.body.interest, req.body.gender, req.body.description, req.body.genderInterest, req.body.ageInterestMin, req.body.ageInterestMax );
-        console.log("her står payload klassen nedeunder")
-        console.log(payload)
         
         await db.update(payload)
         context.res = {
-            body: {status: "update Succes"}
+            body: {status: `The user info for UserID: ${req.body.userID} was successfully updated`}
         }
     } catch(error) {
         context.res = {

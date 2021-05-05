@@ -41,7 +41,6 @@ const UsersEmail = () => {
                 if(!response.ok) {
                     throw new Error(results.message);
                 }
-                console.log(results)
 
                 // for defaultValues
                 setEmail(results[14].value);

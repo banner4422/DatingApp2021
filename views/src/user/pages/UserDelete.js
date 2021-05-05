@@ -22,6 +22,7 @@ const UserDelete = () => {
                     mode: 'cors'
                 });
                 const results = await response.json();
+                console.log(results);
                 if(!response.ok) {
                     throw new Error(results.message);
                 }

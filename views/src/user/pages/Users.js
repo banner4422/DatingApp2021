@@ -43,7 +43,6 @@ const Users = () => {
                 if(!response.ok) {
                     throw new Error(results.message);
                 }
-                console.log(results)
                 setFullName(results[1].value + ' ' + results[2].value);
                 setCity(results[3].value);
                 setAge(results[4].value);

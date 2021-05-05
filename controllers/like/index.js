@@ -25,7 +25,7 @@ const LikeFunction = (context, id1, id2) => {
         if (err){
             context.log.error(err);
             context.res.status = 500;
-            context.res.body = 'Error executing T-SQL command';
+            context.res.body = 'Error executing T-SQL command for /api/like';
         } else {
             context.res = {
                 body: result
@@ -61,11 +61,6 @@ module.exports = function (context, req) {
     const id1 = (req.query.id1 || (req.body && req.body.id1));
     const id2 = (req.query.id2 || (req.body && req.body.id2));
 
-    let like = LikeFunction(context, id1, id2)
-
-    if (like > 1) {
-        console.log('det passer haha')
-    }
-
-    context.log('like data has been sent.');
+    LikeFunction(context, id1, id2)
+    context.log(`Like by userID: ${id2} to userID: ${id1} was successful`);
 }

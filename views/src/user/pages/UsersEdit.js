@@ -124,7 +124,6 @@ const UsersEdit = () => {
                 if(!response.ok) {
                     throw new Error(results.message);
                 }
-                console.log(results)
 
                 // for defaultValues
                 setFirstName(results[1].value);

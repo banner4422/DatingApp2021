@@ -17,25 +17,14 @@ module.exports = async function (context, req) {
             break
         default:
             context.res = {
-                body: 'This is a post request route'
+                body: 'This is a POST request route'
             };
             break
     }
     async function post(context, req){
         try{
-            console.log("req.body test nedeunder")
-            console.log(req.body)
-            console.log(req.body.email)
-            console.log(req.body.firstName)
-
-           // let payload = new TinderUser(req.body.email, req.body.password, req.body.firstName, req.body.lastName, req.body.city, req.body.age, req.body.interest, req.body.gender, req.body.description, req.body.genderInterest, req.body.ageInterestMin, req.body.ageInterestMax);
            let payload = new TinderUser(0, req.body.email, req.body.password, req.body.firstName, req.body.lastName, req.body.city, req.body.age, req.body.interest, req.body.gender, req.body.description, req.body.genderInterest, req.body.ageInterestMin, req.body.ageInterestMax);
-
-            console.log("nederunder står payload klassen")
-            console.log(payload)
-            console.log("navnet på payload er " + payload.name + " eller med underscore; " + payload._name)
            
-            // fetch the userID created in the signup function from ./db
             let signupID = await db.Signup(payload)
 
             let token;
@@ -48,13 +37,13 @@ module.exports = async function (context, req) {
             context.res = {
                 body: {loginLogic: signupID, token: token}
             }
-            context.log('The user was signed up and logged in')
+            context.log(`UserID: ${signupID[0].value} was signed up and logged in.`)
         } catch(error){
             context.res = {
                 status: 400,
                 body: error.message
             }
-            context.log('Error 400 for the signup post route')
+            context.log('Error 400 for the signup POST route')
         }
     }
 }

@@ -17,14 +17,14 @@ module.exports = async function (context, req) {
             break
         default:
             context.res = {
-                body: 'You need to insert data to get login'
+                body: 'This is a POST route'
             };
             break
     }
     async function post(context, req){
         try{
             let payload = req.body;
-            // fetch the userID created in the signup function from ./db
+            console.log(payload)
             let loginCheck = await db.Login(payload)
             let token;
             try {
@@ -33,19 +33,21 @@ module.exports = async function (context, req) {
                 console.log(err)
             }
             const passMatch = await bcrypt.compare(payload.password, loginCheck[2].value)
-            console.log(token)
             if (passMatch) {
                 context.res = {
-                    body: {loginLogic: loginCheck, token: token}
+                    body: {
+                        loginLogic: loginCheck, 
+                        token: token
+                    }
                 }
-                context.log('The user was logged in')
+                context.log(`UserID: ${loginCheck[0].value} was logged in.`)
             }
         } catch(error){
             context.res = {
                 status: 400,
                 body: error.message
             }
-            context.log('Error 400 for the login get route')
+            context.log('Error 400 for the login POST route')
         }
     }
 }

@@ -61,7 +61,7 @@ ORDER BY abs( tinder.age - @age), CASE intrst.id WHEN @interest THEN @interest E
         if (err){
             context.log.error(err);
             context.res.status = 500;
-            context.res.body = 'Error executing T-SQL command';
+            context.res.body = 'Error executing T-SQL command for /api/getPotentialMatches';
         } else {
             context.res = {
                 body: result
@@ -93,7 +93,7 @@ ORDER BY abs( tinder.age - @age), CASE intrst.id WHEN @interest THEN @interest E
     connection.connect();
 }
 module.exports = function (context, req) {
-    context.log('Data containing all users has been sent.');
     const userID = (req.query.userID || (req.body && req.body.userID));
     executeSQL(context, userID)
+    context.log(`Potential matches for userID: ${userID} has been sent successfully`);
 }

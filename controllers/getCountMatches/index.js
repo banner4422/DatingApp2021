@@ -1,8 +1,7 @@
 const db = require('./db');
-const TinderUser = require("../../model/Classes"); 
 
 module.exports = async function (context, req) {
-    context.log('JavaScript HTTP trigger function processed a request.');
+    context.log('the getCountMatches function was contacted');
 
     try { 
         await db.startDb(); //start db connection
@@ -16,14 +15,13 @@ module.exports = async function (context, req) {
             break;
         default: 
             context.res = {
-                body: "please get or post"
+                body: "Please GET"
             };
             break;
     }
+    context.log('Function for getCountMatches has been executed successfully');
 }
- 
-    //////////////////////////////////////////////////////
-    // GET COUNT 11111111
+
     async function get1(context) {
         try {
             let userCount = await db.select1()

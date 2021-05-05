@@ -2,7 +2,7 @@ const db = require('./db');
 const TinderUser = require("../../model/Classes"); 
 
 module.exports = async function (context, req) {
-    context.log('JavaScript HTTP trigger function processed a request.');
+    context.log('the tinderUserDelete function was contacted');
 
     try { 
         await db.startDb(); //start db connection
@@ -11,21 +11,16 @@ module.exports = async function (context, req) {
     } 
     // her håndteres der om vi enten getter eller poster på samme endpoint pga sikkerhedsmæssige årsager.
     switch (req.method) {
-        case 'GET':
-            await get(context, req);
-            break;
-        case 'POST':
-            await post(context, req);
-            break;
         case 'DELETE':
             await deleteUser(context, req);
             break;
         default: 
             context.res = {
-                body: "please get, post or delete"
+                body: "Please DELETE"
             };
             break;
     }
+    context.log(`Function for tinderUserDelete has been executed successfully. UserID: ${req.query.userID} got deleted.`);
 }
 
     // DELETE
@@ -34,7 +29,7 @@ module.exports = async function (context, req) {
             let payload = new TinderUser(req.query.userID);
             await db.removeUser(payload)
             context.res = {
-                body: {status: "Delete Succes"}
+                body: {status: `UserID: ${req.query.userID} was successfully deleted`}
             }
         } catch(error) {
             context.res = {

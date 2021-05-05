@@ -61,5 +61,5 @@ module.exports = function (context, req) {
 
     Matching(context, id1, id2)
 
-    context.log('match data has been sent.');
+    context.log(`Match between userID: ${id2} and ${id1} was successful`);
 }

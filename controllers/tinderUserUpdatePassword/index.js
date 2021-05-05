@@ -2,7 +2,7 @@ const db = require('./db.js');
 const TinderUser = require("../../model/Classes"); 
 
 module.exports = async function (context, req) {
-    context.log('JavaScript HTTP trigger function processed a request.');
+    context.log('the tinderUserUpdatePassword function was contacted');
 
     try { 
         await db.startDb(); //start db connection
@@ -11,21 +11,16 @@ module.exports = async function (context, req) {
     } 
     // her håndteres der om vi enten getter eller poster på samme endpoint pga sikkerhedsmæssige årsager.
     switch (req.method) {
-        case 'GET':
-            await get(context, req);
-            break;
-        case 'POST':
-            await post(context, req);
-            break;
         case 'PATCH':
             await patch(context, req);
             break;
         default: 
             context.res = {
-                body: "please get, post or patch"
+                body: "Please PATCH"
             };
             break;
     }
+    context.log(`Function for tinderUserUpdatePassword has been executed successfully. UserID: ${req.query.userID} got their password updated.`);
 }
 
 // Patch 
@@ -36,7 +31,7 @@ async function patch(context, req) {
         
         await db.update(payload)
         context.res = {
-            body: {status: "update password Succes"}
+            body: {status: `The user password for UserID: ${req.body.userID} was successfully updated`}
         }
     } catch(error) {
         context.res = {

@@ -4,7 +4,7 @@ var Request = require('tedious').Request
 // the config file is not included because of sensitive data
 const config = require('../config.json')
 
-const executeSQL = (context,userId) => {
+const executeSQL = (context, userId) => {
     var result = '';
 
     // create connection object
@@ -29,7 +29,7 @@ const executeSQL = (context,userId) => {
         if (err){
             context.log.error(err);
             context.res.status = 500;
-            context.res.body = 'Error executing T-SQL command';
+            context.res.body = 'Error executing T-SQL command for /api/currentMatches';
         } else {
             context.res = {
                 body: result
@@ -61,7 +61,7 @@ const executeSQL = (context,userId) => {
     connection.connect();
 }
 module.exports = function (context, req) {
-    context.log('Match data has been sent.');
     const userId = (req.query.userId || (req.body && req.body.userId));
     executeSQL(context, userId)
+    context.log(`currentMatches function for userID: ${userId} has been executed successfully`);
 }

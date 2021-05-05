@@ -44,23 +44,23 @@ const App = () => {
 
   // useCallback() to avoid infinite loops
   // function for when the user successfully logs in
-  const login = useCallback((uid, token, expDate) => {
+  const login = useCallback((uid, token, admin, expDate) => {
     setToken(token);
     setUserID(uid);
     setIs_admin(false);
     const expData = expDate || new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 365);
     setTokenExpDate(expData);
-    localStorage.setItem('userData', JSON.stringify({userID: uid, token: token, expires: expData.toISOString()}))
+    localStorage.setItem('userData', JSON.stringify({userID: uid, token: token, is_admin: admin, expires: expData.toISOString()}))
   }, []);
 
   // function for admin user logging in successfully
-  const adminLogin = useCallback((uid, token, expDate) => {
+  const adminLogin = useCallback((uid, token, admin, expDate) => {
     setToken(token);
     setUserID(uid);
     setIs_admin(true)
     const expData = expDate || new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 365);
     setTokenExpDate(expData);
-    localStorage.setItem('userData', JSON.stringify({userID: uid, token: token, expires: expData.toISOString()}))
+    localStorage.setItem('userData', JSON.stringify({userID: uid, token: token, is_admin: admin, expires: expData.toISOString()}))
   }, []);
 
   // function for when the user successfully logs out
@@ -84,7 +84,11 @@ const App = () => {
   useEffect(() => {
     const storageData = JSON.parse(localStorage.getItem('userData'));
     if (storageData && storageData.token && new Date(storageData.expires) > new Date()) {
-      login(storageData.userID, storageData.token, new Date(storageData.expires));
+      if (storageData.is_admin === true) {
+        adminLogin(storageData.userID, storageData.token, storageData.is_admin, new Date(storageData.expires));
+      } else {
+        login(storageData.userID, storageData.token, storageData.is_admin, new Date(storageData.expires));
+    }
     }
   }, [login]);
 

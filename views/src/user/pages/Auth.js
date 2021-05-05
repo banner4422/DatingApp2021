@@ -71,7 +71,6 @@ const Auth = () => {
                     throw new Error(results.message);
                 }
                 setGenderFetch(results);
-                console.log(results)
             } catch (err) {
                 console.log(err)
             }
@@ -158,20 +157,19 @@ const Auth = () => {
             });
             // converts the data to json
             const responseData = await response.json();
-            console.log(responseData)
             if (!response.ok) {
                 // throw error if the login wasn't successful, perhaps because the data didn't pass server-side validation
             throw new Error(responseData.message);
             }
             if (responseData.loginLogic[1].value === true) {
                 setLoading(false);
-                auth.adminLogin(responseData.loginLogic[0].value, responseData.token)
+                auth.adminLogin(responseData.loginLogic[0].value, responseData.token, responseData.loginLogic[1].value)
                 history.push(`/admin/stats`)
             } else {
             // we are now done sending data, so setLoading = false
             setLoading(false);
             // log the user in with the userID from the responseData
-            auth.login(responseData.loginLogic[0].value, responseData.token)
+            auth.login(responseData.loginLogic[0].value, responseData.token, responseData.loginLogic[1].value)
             history.push(`/homepage/${responseData.loginLogic[0].value}`)
         }
             } catch (err) {
@@ -199,10 +197,8 @@ const Auth = () => {
                     email: email,
                 })
             });
-            console.log('response: ' + response)
             // converts the data to json
             const responseData = await response.json();
-            console.log(responseData)
             // if the email exists, it sends the email back
             if (responseData.length === 1) {
                 window.alert(`The email ${responseData[0].value} already exists.\nLog in with this email or use another email to sign up.`)

@@ -39,24 +39,20 @@ const PotentialMatch = props => {
                 });
                 // converts the post data to json
                 const responseData = await response.json();
-                console.log(responseData.length)
-                // checking if the post request was succesfully received
-                console.log(responseData)
                 // throw error if the like wasn't received by the server, perhaps cuz of formatting issues
                 if (!response.ok) {
                 throw new Error(responseData.message);
                 }
                 if (responseData.length > 1) {
-                    console.log('de er et match')
                     try {
                         Match(props.id, auth.userID);
                     window.alert(`You have a match!\nYou matched with ${props.first_name} ${props.last_name} from ${props.city}!\nCheck your match's info on the match page`)
                     } catch {
-                        console.log('match error')
+                        console.log(`Match error between userID: ${props.id} and userID: ${auth.userID}`)
                     }
                 } else {
                     // evt. pagination next page?
-                    console.log('like received')
+                    console.log(`Like sent to userID: ${props.id} by userID: ${auth.userID}`)
                 }
                 // catch error if connection with fetch wasn't possible
         } catch (err) {}
@@ -99,7 +95,6 @@ const PotentialMatch = props => {
                     })
                 });
                 const responseData = await response.json();
-                console.log(responseData)
                 if (!response.ok) {
                 throw new Error(responseData.message);
                 }

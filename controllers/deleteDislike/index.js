@@ -17,7 +17,7 @@ const executeSQL = (context) => {
         if (err){
             context.log.error(err);
             context.res.status = 500;
-            context.res.body = 'Error executing T-SQL command';
+            context.res.body = 'Error executing T-SQL command for /api/currentMatches';
         } else {
             context.res = {
                 body: result
@@ -57,5 +57,5 @@ module.exports = async function (context, myTimer) {
         context.log('JavaScript is running late!');
     }
     executeSQL(context)
-    context.log('JavaScript timer trigger function ran!', timeStamp);   
+    context.log('JavaScript timer trigger for the deleteDislike function ran!', timeStamp);   
 };

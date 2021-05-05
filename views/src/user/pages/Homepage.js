@@ -66,7 +66,6 @@ const Homepage = () => {
                 if(!response.ok) {
                     throw new Error(results.message);
                 }
-                console.log(results)
                 setFullName(results[1].value + ' ' + results[2].value);
             } catch (err) {
                 console.log(err)
