@@ -20,7 +20,7 @@ module.exports = async function (context, req) {
             };
             break;
     }
-    context.log(`Function for tinderUserDelete has been executed successfully. UserID: ${req.query.userID} got deleted.`);
+    context.log(`Function for tinderUserDelete has been executed successfully`);
 }
 
     // DELETE
@@ -31,6 +31,7 @@ module.exports = async function (context, req) {
             context.res = {
                 body: {status: `UserID: ${req.query.userID} was successfully deleted`}
             }
+            context.log(`Function for tinderUserDelete has been executed successfully. UserID: ${req.query.userID} got deleted.`);
         } catch(error) {
             context.res = {
                 status: 400,

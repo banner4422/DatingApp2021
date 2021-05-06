@@ -56,6 +56,7 @@ module.exports = async function (context, req) {
             context.res = {
                 body: user
             }
+            context.log(`Function for tinderUserGetFullyByID has been sent successfully. UserID: ${req.query.id} got full info.`);
         } catch(error) {
              context.res = {
                  status: 400,

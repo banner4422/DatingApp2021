@@ -33,6 +33,7 @@ async function patch(context, req) {
         context.res = {
             body: {status: `The user email for UserID: ${req.body.userID} was successfully updated`}
         }
+        context.log(`Function for tinderUserUpdateEmail has been sent successfully. UserID: ${req.query.userID} got their email updated.`);
     } catch(error) {
         context.res = {
             status: 400,

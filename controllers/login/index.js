@@ -41,7 +41,12 @@ module.exports = async function (context, req) {
                     }
                 }
                 context.log(`UserID: ${loginCheck[0].value} was logged in.`)
-            }
+            } else {
+                context.res = {
+                    status: 401,
+                    body: `Wrong password for email: ${payload.email}`
+                }
+            }      
         } catch(error){
             context.res = {
                 status: 400,

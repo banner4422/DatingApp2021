@@ -29,6 +29,7 @@ module.exports = async function (context, req) {
             context.res = {
                 body: userCount
             }
+            context.log('Function for getCountMatches has been sent successfully');
         } catch(error) {
              context.res = {
                  status: 400,

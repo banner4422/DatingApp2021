@@ -18,7 +18,7 @@ const LikeFunction = (context, id1, id2) => {
     SET IDENTITY_INSERT dating.eksempel.liked ON
     SELECT *
     FROM dating.eksempel.liked AS liking
-    WHERE (liking.user_id_sender = 8 AND liking.user_id_reciever = 5) OR (liking.user_id_sender = 5 AND liking.user_id_reciever = 8)
+    WHERE (liking.user_id_sender = ${id2} AND liking.user_id_reciever = ${id1}) OR (liking.user_id_sender = ${id1} AND liking.user_id_reciever = ${id2})
     FOR JSON PATH
     SET IDENTITY_INSERT dating.eksempel.liked OFF
     `, function(err){

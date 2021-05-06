@@ -21,7 +21,6 @@ module.exports = async function (context, req) {
     }
     context.log('Function for emailCheck has been executed successfully');
 
-
     async function post(context, req){
         try{
            let payload = new TinderUser(0, req.body.email);
@@ -30,6 +29,7 @@ module.exports = async function (context, req) {
             context.res = {
                 body: emailCheck
             }
+            context.log('emailCheck has been sent successfully');
         } catch(error){
             context.res = {
                 status: 400,

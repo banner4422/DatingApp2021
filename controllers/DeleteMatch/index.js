@@ -32,6 +32,7 @@ module.exports = async function (context, req) {
             context.res = {
                 body: { status: `Delete match for userID: ${payload._id1} with userID: ${payload._id1} was successful` }
             }
+            context.log(`Delete match for userID: ${payload._id1} with userID: ${payload._id1} was successful`);
         } catch(error) {
             context.res = {
                 status: 400,

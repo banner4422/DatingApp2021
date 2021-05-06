@@ -29,6 +29,7 @@ module.exports = async function (context, req) {
             context.res = {
                 body: {status: `Dislike by userID: ${payload._id2} to userID: ${payload._id1} was successful`}
             }
+            context.log(`Dislike by userID: ${payload._id2} to userID: ${payload._id1} was successful`);
         } catch(error){
             context.res = {
                 status: 400,
