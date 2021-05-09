@@ -207,7 +207,7 @@ const App = () => {
     adminLogin: adminLogin,
     is_admin: is_admin  }}
   >
-    {/* The rendering of the multi-page web application */}
+    {/* The rendering of the single-page web application */}
     {/*
     <BrowserRouter> is a <Router> that uses the HTML5 history API (pushState, replaceState and the popstate event) 
     to keep your UI in sync with the URL.
