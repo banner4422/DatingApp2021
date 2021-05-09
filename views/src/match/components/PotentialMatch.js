@@ -2,23 +2,13 @@ import React, { useContext } from 'react';
 import { AuthContext } from '../../shared/context/Auth-context';
 import './PotentialMatch.css'
 
-{/*
-For the matching feature
-Like/dislikes can only be observed through the browser's console, no visual indication of a like/dislike implemented
-
-This file is a component that gets used by ./PotentialMatchParent.js.
-Components let you split the UI into independent, **reusable** pieces, and think about each piece in isolation.
-Conceptually, components are like JavaScript functions. 
-They accept arbitrary inputs (called “props”) and return React elements describing what should appear on the screen.
-Read more here https://reactjs.org/docs/components-and-props.html
-*/}
 const PotentialMatch = props => {
     // get the Authorization context, or in other words, the user logged in
     // useContext provides a way to pass data through the component tree without having to pass props down manually at every level.
     // read more here https://reactjs.org/docs/hooks-reference.html#usecontext 
     const auth = useContext(AuthContext);
 
-    // like function, that posts the like for the user
+    // like function, that HTTP posts the like for the user
     // it's used by a button below
     const Like = async event => {
         // avoids refreshing the page when it's posting
@@ -32,17 +22,19 @@ const PotentialMatch = props => {
                     },
                     mode: 'cors',
                     body: JSON.stringify({
-                        // take the userID from the user who is logged in
                       id1: props.id,
                       id2: auth.userID
                     })
                 });
                 // converts the post data to json
                 const responseData = await response.json();
-                // throw error if the like wasn't received by the server, perhaps cuz of formatting issues
+                
                 if (!response.ok) {
-                throw new Error(responseData.message);
+                    throw new Error(responseData.message);
                 }
+
+                // the HTTP post stores the like if it doesn't already exists, and then returns rows where both the props.id and auth.userID are present
+                // if it's more than 1 row (exactly 2 rows), then the two users have liked each other and then it's a match
                 if (responseData.length > 1) {
                     try {
                         Match(props.id, auth.userID);
@@ -51,14 +43,15 @@ const PotentialMatch = props => {
                         console.log(`Match error between userID: ${props.id} and userID: ${auth.userID}`)
                     }
                 } else {
-                    // evt. pagination next page?
+                    // perhaps pagination next page?
                     console.log(`Like sent to userID: ${props.id} by userID: ${auth.userID}`)
+                    // console logging 
                 }
                 // catch error if connection with fetch wasn't possible
         } catch (err) {}
       };
 
-    // same notes as the like function above
+    // HTTP post dislike
     const Dislike = async event => {
     event.preventDefault();
     try {
@@ -76,11 +69,12 @@ const PotentialMatch = props => {
             const responseData = await response.json();
             console.log(responseData)
             if (!response.ok) {
-            throw new Error(responseData.message);
+                throw new Error(responseData.message);
             }
     } catch (err) {}
     };
 
+    // posts the match if the two users has liked each other
     const Match = async (userA, userB) => {
         try {
             const response = await fetch('http://' + process.env.REACT_APP_backend +`/api/postMatch`, {
@@ -96,12 +90,11 @@ const PotentialMatch = props => {
                 });
                 const responseData = await response.json();
                 if (!response.ok) {
-                throw new Error(responseData.message);
+                    throw new Error(responseData.message);
                 }
         } catch (err) {}
         };
 
-    // read about props at the start of the file
       return (
     <li className='poten'>
         <div className='poten-info'>

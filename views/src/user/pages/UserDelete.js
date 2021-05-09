@@ -32,7 +32,6 @@ const UserDelete = () => {
             setLoading(false);
             auth.logout();
             history.push(`/`)
-            // when token is implement we'll use window.location.reload() instead
         };
     
     if (loading) {

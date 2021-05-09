@@ -7,6 +7,7 @@ const AdminUsers = () => {
     const [loading, setLoading] = useState(false);
     const [userLoad, setUserLoad] = useState();
 
+    // get all existing dating app users on the application
     useEffect (() => {
         const GET = async () => {
             setLoading(true);

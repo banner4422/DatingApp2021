@@ -8,21 +8,16 @@ import loadingGIF from '../../shared/components/loadingGIF.gif'
 const UsersPassword = () => {
     // react-hook-form functionalities
     const { register, handleSubmit } = useForm();
-    // auth route
     const auth = useContext(AuthContext);
-    // loading state
     const [loading, setLoading] = useState(false);
-    // history to link back
     const history = useHistory();
 
-    // states for existing data to be used in defaultValues
-
-    // userid from url
     const userID = useParams().userID;
     
-    // patch/update function, which gets used by handleSubmit and onSubmit
+    // update password
     const userUpdateInfo = async (data) => {
         // event.preventDefault is implemented ''under the hood'' of the handleSubmit method from react-hook-form https://labs.thisdot.co/blog/taming-forms-with-react-hook-form
+        // if the two password inputs doesn't equal each other
         if (data.passwordPlace !== data.password) {
           window.alert(`Your passwords doesn't match`)
           return
@@ -53,7 +48,6 @@ const UsersPassword = () => {
         } catch (err) {}
       };
 
-    // meanwhile it loads, required for it to load properly
     if (loading) {
         return (
             <React.Fragment>
@@ -78,7 +72,6 @@ const UsersPassword = () => {
             }
     }
 
-    // the actual page
     return <div className='Users'>
         <form id='theData' onSubmit={handleSubmit(userUpdateInfo)}>
             <div>
@@ -92,13 +85,11 @@ const UsersPassword = () => {
 
             <div>
             <label htmlFor='passwordPlace'>Type your new password again</label><br></br>
-            {/* The onChange function updates the state based on user input, same goes for the others below */}
             <input type='password' id='passwordPlace' name='passwordPlace' placeholder='Please enter a password' {...register('passwordPlace')} /><br></br>
             </div><br></br>
 
             <div>
-            <label htmlFor='email'>Type your new password again</label><br></br>
-            {/* The onChange function updates the state based on user input, same goes for the others below */}
+            <label htmlFor='password'>Type your new password again</label><br></br>
             <input type='password' id='password' name='password' placeholder='Please enter a password' {...register('password')} /><br></br>
             </div><br></br>
 

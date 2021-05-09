@@ -46,6 +46,7 @@ const AdminStats = () => {
         };
         GET();
     }, []);
+    
     if (loading) {
         return (
         <React.Fragment>

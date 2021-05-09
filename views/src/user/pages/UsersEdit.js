@@ -9,11 +9,8 @@ import Select from './components/Dropdown'
 const UsersEdit = () => {
     // react-hook-form functionalities
     const { register, handleSubmit } = useForm();
-    // auth route
     const auth = useContext(AuthContext);
-    // loading state
     const [loading, setLoading] = useState(false);
-    // history to link back
     const history = useHistory();
 
     // states for existing data to be used in defaultValues
@@ -45,9 +42,6 @@ const UsersEdit = () => {
     const [selectGenderBox, setSelectGenderBox] = useState()
     const [selectGenderInterestBox, setSelectGenderInterestBox] = useState()
     const [selectInterestBox, setSelectInterestBox] = useState()
-    console.log(selectGenderBox)
-    console.log(selectGenderInterestBox)
-    console.log(selectInterestBox)
 
     // fetches genders
     useEffect (() => {
@@ -164,9 +158,11 @@ const UsersEdit = () => {
     // patch/update function, which gets used by handleSubmit and onSubmit
     const userUpdateInfo = async (data) => {
         // event.preventDefault is implemented ''under the hood'' of the handleSubmit method from react-hook-form https://labs.thisdot.co/blog/taming-forms-with-react-hook-form
+        setLoading(true);
         try {
-        
-          const response = await fetch('http://' + process.env.REACT_APP_backend + '/api/tinderUserUpdate', {
+            setLoading(true);
+            //console.log(data)
+            const response = await fetch('http://' + process.env.REACT_APP_backend + '/api/tinderUserUpdate', {
                     method: 'PATCH',
                     headers: {
                         'Content-Type': 'application/json'
@@ -199,7 +195,6 @@ const UsersEdit = () => {
         } catch (err) {}
       };
 
-    // meanwhile it loads, required for it to load properly
     if (loading) {
         return (
             <React.Fragment>
@@ -244,7 +239,6 @@ const UsersEdit = () => {
 
             <div>
             <label htmlFor='lastName'>Last Name</label><br></br>
-            {/* The onChange function updates the state based on user input, same goes for the others below */}
             <input type='text' id='lastName' name='lastName' defaultValue={defaultValues.lastName} placeholder='Last Name' {...register('lastName')}></input><br></br>
             </div>
 

@@ -4,16 +4,6 @@ import { AuthContext } from '../../shared/context/Auth-context';
 import { useParams } from 'react-router-dom';
 import loadingGIF from '../../shared/components/loadingGIF.gif'
 
-{/*shows a potential match. Should only show one potential match at a time, 
-and show a new potential match for every time a button is clicked
-
-I made a mistake by copypasting the Matches.js logic, which is why it renders every existing user LOL
-To only render one user, you could a single js file, no components.
-
-An explanation of the logic below can be found in ./Matches, because the code is exactly the same,
-just a different API route
-
-*/}
 const Matching = () => {
     const [loading, setLoading] = useState(false);
     const [userLoad, setUserLoad] = useState();
@@ -21,6 +11,7 @@ const Matching = () => {
     const userID = useParams().userID;
     const auth = useContext(AuthContext)
 
+    // get potential matches
     useEffect (() => {
         const GET = async () => {
             setLoading(true);

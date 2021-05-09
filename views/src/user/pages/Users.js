@@ -4,14 +4,6 @@ import { AuthContext } from '../../shared/context/Auth-context';
 import './Users.css'
 import loadingGIF from '../../shared/components/loadingGIF.gif'
 
-{/*
-Renders the current information for the logged in user
-
-An explanation of the logic below can be found in ./Matches, because the code is exactly the same,
-just a different API route
-
-*/}
-
 const Users = () => {
   const [loading, setLoading] = useState(false);
   const [fullName, setFullName] = useState('');

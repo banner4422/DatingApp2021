@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import './Match.css'
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 {/*
 
 */}
 const Match = props => {
     const [loading, setLoading] = useState(false);
+    // using the user id from url
     const userID = useParams().userID;
-    const history = useHistory();
 
+        // delete match HTTP
         const DELETE = async () => {
             setLoading(true);
             try {
@@ -27,8 +28,7 @@ const Match = props => {
                 console.log(err)
             }
             setLoading(false);
-            history.push(`/matches/${userID}`)
-            // when token is implement we'll use window.location.reload() instead
+            window.location.reload();
         };
 
     return (

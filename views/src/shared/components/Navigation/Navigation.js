@@ -5,15 +5,6 @@ import Header from './Header';
 import NavLinks from './NavLinks';
 import { AuthContext } from '../../context/Auth-context'
 
-{/*
-exports the navigation header
-
-Header is used to wrap the Link and NavLinks
-Read about both Link and NavLinks in ./NavLinks
-
-This navigation header file is used in ../../../App.js
-
-*/}
 const Navigation = props => {
 
     const auth = useContext(AuthContext);

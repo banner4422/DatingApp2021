@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import './adminUsersChild.css'
-import { useHistory, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const AdminUsersChild = props => {
     const [loading, setLoading] = useState(false);
-    const history = useHistory();
 
-    // delete user
+    // delete user HTTP
     const DELETE = async () => {
         setLoading(true);
         try {
@@ -25,8 +24,7 @@ const AdminUsersChild = props => {
             console.log(err)
         }
         setLoading(false);
-        history.push(`/admin/users`)
-        // when token is implement we'll use window.location.reload() instead
+        window.location.reload();
     };
 
     return (

@@ -8,25 +8,19 @@ import loadingGIF from '../../shared/components/loadingGIF.gif'
 const UsersEmail = () => {
     // react-hook-form functionalities
     const { register, handleSubmit } = useForm();
-    // auth route
     const auth = useContext(AuthContext);
-    // loading state
     const [loading, setLoading] = useState(false);
-    // history to link back
     const history = useHistory();
 
-    // states for existing data to be used in defaultValues
     const [email, setEmail] = useState('');
 
-    // default values for preview to be used in defaultValues
     const defaultValues = {
         email: email
     }
 
-    // userid from url
     const userID = useParams().userID;
 
-    // fetches existing user data
+    // fetches existing user email
     useEffect (() => {
         const GET = async () => {
             setLoading(true);
@@ -52,7 +46,7 @@ const UsersEmail = () => {
         GET();
     }, []);
     
-    // patch/update function, which gets used by handleSubmit and onSubmit
+    // update email
     const userUpdateInfo = async (data) => {
         // event.preventDefault is implemented ''under the hood'' of the handleSubmit method from react-hook-form https://labs.thisdot.co/blog/taming-forms-with-react-hook-form
         try {
@@ -82,7 +76,6 @@ const UsersEmail = () => {
         } catch (err) {}
       };
 
-    // meanwhile it loads, required for it to load properly
     if (loading) {
         return (
             <React.Fragment>
@@ -114,7 +107,6 @@ const UsersEmail = () => {
         </div>)
     }
 
-    // the actual page
     return <div className='Users'>
         <form id='theData' onSubmit={handleSubmit(userUpdateInfo)}>
             <div>
@@ -131,7 +123,6 @@ const UsersEmail = () => {
 
             <div>
             <label htmlFor='email'>Insert your new email here</label><br></br>
-            {/* The onChange function updates the state based on user input, same goes for the others below */}
             <input type='email' id='email' name='email' defaultValue={defaultValues.email} placeholder='Please enter an email' {...register('email')} /><br></br>
             </div><br></br>
 

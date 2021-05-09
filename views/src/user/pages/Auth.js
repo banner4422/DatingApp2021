@@ -3,38 +3,9 @@ import './Auth.css'
 import { AuthContext } from '../../shared/context/Auth-context'
 import { useHistory } from 'react-router-dom';
 
-{/*
-The login/signup page
-
-It's used by ../../App.js
-
-Besides React, this file specifically make use of useState and useEffect, which are both hooks (https://reactjs.org/docs/hooks-state.html#whats-a-hook)
-Hooks basically makes it possible to use various React features without writing a class specifying what features to use
-
-useState() & setState() is where you store property values that belongs to the component.
-When the state object changes, the component re-renders.
-The comments below explains for each useState case
-
-useEffect() - By using this Hook, you tell React that your component needs to do something after render. 
-React will remember the function you passed (we’ll refer to it as our “effect”), and call it later after performing the DOM updates
-So e.g. the useEffect() in ../../match/pages/Matches fetches the matches for the user
-If the user deletes a match, it re-renders the page (because of useState()) and then useEffect fetches once again
-
-*/}
 const Auth = () => {
-    // get the Authorization context, or in other words, the user logged in
-    // useContext provides a way to pass data through the component tree without having to pass props down manually at every level.
-    // read more here https://reactjs.org/docs/hooks-reference.html#usecontext 
     const auth = useContext(AuthContext)
-
-    //sets state for if the user wants to login or not, used by the modeHandler below
-    // further explanation for it's purpose below
     const [Login, setLogin] = useState(true);
-
-    // Manages the state of fetching the API data, very important.
-    // Because if it wasn't implemented, the page would fail to render data because it looks after the data instantly
-    // which would end up as undefined because the data isn't loaded yet
-    // when manging the state of loading the data, it delays rendering elements till they are loaded and defined in (setUserload)
     const [loading, setLoading] = useState(false);
 
     // useStates for the POST request
@@ -55,12 +26,11 @@ const Auth = () => {
 
 
     // Fetches data to be used for signing up
-    // new Azure Functions implementation
     const [genderFetch, setGenderFetch] = useState('');
     const [genderInterestFetch, setGenderInterestFetch] = useState('');
     const [interestFetch, setinterestFetch] = useState('');
 
-    // fetches the gender table from /api/getGenders, or ../../../../getGenders/index
+    // fetches the gender table 
     useEffect (() => {
         const GET = async () => {
             setLoading(true);
@@ -79,7 +49,7 @@ const Auth = () => {
         GET();
     }, []);
 
-    // fetches the gender_Interest table from /api/getInterest, or ../../../../getInterest/index
+    // fetches the gender_Interest table 
     useEffect (() => {
         const GET = async () => {
             setLoading(true);
@@ -98,7 +68,7 @@ const Auth = () => {
         GET();
     }, []);
 
-    // fetches the gender_Interest table from /api/getGenderInterest, or ../../../../getGenderInterest/index
+    // fetches the gender_Interest table 
     useEffect (() => {
         const GET = async () => {
             setLoading(true);
@@ -126,7 +96,7 @@ const Auth = () => {
         setLogin(prevMode => !prevMode);
     };
     
-    // login and signup POST function, used by the HTML form below
+    // login and signup POST function
     const submission = async event => {
         // avoids refreshing the page when it's posting
         // https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault 
@@ -159,7 +129,7 @@ const Auth = () => {
             const responseData = await response.json();
             if (!response.ok) {
                 // throw error if the login wasn't successful, perhaps because the data didn't pass server-side validation
-            throw new Error(responseData.message);
+                throw new Error(responseData.message);
             }
             if (responseData.loginLogic[1].value === true) {
                 setLoading(false);
@@ -181,6 +151,10 @@ const Auth = () => {
             // if the user wants to signup
             if (ageMin > ageMax) {
                 window.alert(`Your minimum age can't be higher than your maximum age`)
+                return
+            }
+            if (city.length < 1) {
+                window.alert(`You need to write your email`)
                 return
             }
             // we need to add more validation e.g. for missing values etc.
@@ -205,12 +179,9 @@ const Auth = () => {
                 return
             }
             if (!response.ok) {
-                // if the posted data did not pass server-side validation
-            throw new Error(responseData.message);
+                throw new Error(responseData.message);
             }
-            // we are now done sending data, so setLoading = false
             setLoading(false);
-            // log the user in after signing up, by using their userID
             } catch (err) {
                 try {
                     const response = await fetch('http://' + process.env.REACT_APP_backend + '/api/signup', {
@@ -220,7 +191,6 @@ const Auth = () => {
                     },
                     mode: 'cors',
                     body: JSON.stringify({
-                        // all the useStates from above
                         firstName: firstName,
                         lastName: lastName,
                         age: age,
@@ -240,7 +210,7 @@ const Auth = () => {
                 //console.log(responseData)
                 if (!response.ok) {
                     // if the posted data did not pass server-side validation
-                throw new Error(responseData.message);
+                    throw new Error(responseData.message);
                 }
                 // we are now done sending data, so setLoading = false
                 setLoading(false);
@@ -248,7 +218,6 @@ const Auth = () => {
                 auth.login(responseData.loginLogic[0].value, responseData.token);
                 history.push(`/homepage/${responseData.loginLogic[0].value}`);
                 } catch (err) {
-                    // catch error if it couldn't even connect to the API route for some reason
                     setLoading(false);
                     console.log(err)
                 }
@@ -257,7 +226,6 @@ const Auth = () => {
     }
 
     return <div className='auth'>
-        {/* Remember to set loading because it checks instantly */}
     {loading}
     <h2>{Login ? 'Login' : 'Sign up'}</h2>
     <form id='theData' onSubmit={submission}>
@@ -348,6 +316,7 @@ const Auth = () => {
             </div>
         </div>)}
 
+        {/* Email and password shared by login and signup */}
         <div>
         <label htmlFor='email'>Email:</label><br></br>
         <input type='email' id='email' name='email' value={email} onChange={event => setEmail(event.target.value)}></input><br></br>
