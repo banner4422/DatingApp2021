@@ -1,5 +1,6 @@
 var Connection = require('tedious').Connection;
 var Request = require('tedious').Request
+const Like = require('../../model/likeClass'); 
 
 // the config file is not included because of sensitive data
 const config = require('../config.json')
@@ -61,6 +62,8 @@ module.exports = function (context, req) {
     const id1 = (req.query.id1 || (req.body && req.body.id1));
     const id2 = (req.query.id2 || (req.body && req.body.id2));
 
-    LikeFunction(context, id1, id2)
+    const likes = new Like(id1, id2)
+
+    LikeFunction(context, likes._id1, likes._id2)
     context.log(`Like by userID: ${id2} to userID: ${id1} was successful`);
 }

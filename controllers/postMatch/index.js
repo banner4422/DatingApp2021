@@ -1,5 +1,6 @@
 var Connection = require('tedious').Connection;
 var Request = require('tedious').Request
+const Match = require('../../model/MatchClass'); 
 
 // the config file is not included because of sensitive data
 const config = require('../config.json')
@@ -59,7 +60,9 @@ module.exports = function (context, req) {
     const id1 = (req.query.id1 || (req.body && req.body.id1));
     const id2 = (req.query.id2 || (req.body && req.body.id2));
 
-    Matching(context, id1, id2)
+    const match = new Match(id1, id2)
+
+    Matching(context, match._id1, match._id2)
 
     context.log(`Match between userID: ${id2} and ${id1} was successful`);
 }
