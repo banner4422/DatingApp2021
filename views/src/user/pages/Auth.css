@@ -1,0 +1,15 @@
+.auth-header {
+    color: white;
+    text-align: center;
+  }
+  
+.auth {
+    width: 90%;
+    max-width: 25rem;
+    margin: 7rem auto;
+    text-align: center;
+}
+  
+.auth form {
+    margin-bottom: 1rem;
+}

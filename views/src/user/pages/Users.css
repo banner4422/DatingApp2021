@@ -1,0 +1,11 @@
+.Users {
+    color: white;
+    width: 90%;
+    max-width: 25rem;
+    margin: 7rem auto;
+    text-align: center;
+}
+  
+.Users form {
+    margin-bottom: 1rem;
+}
