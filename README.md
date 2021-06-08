@@ -5,4 +5,4 @@ It's a simple dating web application. No chat functionalities or profile picture
 
 The frontend is made with [React.js](https://reactjs.org/), backend uses [Azure Functions](https://docs.microsoft.com/en-us/azure/azure-functions/functions-overview) and a database provided by [Azure SQL Database](https://docs.microsoft.com/en-us/azure/azure-sql/database/sql-database-paas-overview).
 
-The project is archived.
+The project is archived, and the commit history has been reset for security purposes.
