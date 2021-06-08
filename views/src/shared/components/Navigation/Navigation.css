@@ -1,0 +1,18 @@
+.navigation-title a{
+    border: 1px solid transparent;
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem;
+}
+
+.navigation-title a:hover, a:active {
+    background: white;
+    border-color: black;
+    color: black;
+}
+
+@media only screen and (max-width: 600px) {
+    .navigation-header-nav {
+      display: block;
+    }
+  }

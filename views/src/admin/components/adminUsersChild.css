@@ -1,0 +1,17 @@
+.adminUser {
+    margin: 1rem 0;
+    padding: 0;
+}
+
+.adminUser-info {
+    padding: 1rem;
+    text-align: center;
+}
+.adminUser-info h2, p {
+    margin: 0 0 0.5rem 0;
+}
+
+.adminUser-delete {
+    padding: 1rem;
+    text-align: center;
+}
